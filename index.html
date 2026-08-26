@@ -11,6 +11,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="leaflet.css">
 <style>
 :root{
   --ink:#14201D;
@@ -117,17 +118,17 @@ main{padding:0 0 var(--bar)}
 }
 
 /* ---------- transfer strip ---------- */
-.transfer{
+.trstrip{
   border:1px solid var(--line);border-left:3px solid var(--jade);
   background:var(--paper);border-radius:3px;
   padding:11px 13px;margin:0 0 18px;
 }
-.transfer .lbl{
+.trstrip .lbl{
   font-family:var(--mono);font-size:10px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--jade);display:block;margin-bottom:3px;
 }
-.transfer .route{font-weight:600;font-size:15px;display:block}
-.transfer .det{font-size:13.5px;color:var(--ink-2);display:block;margin-top:2px}
+.trstrip .route{font-weight:600;font-size:15px;display:block}
+.trstrip .det{font-size:13.5px;color:var(--ink-2);display:block;margin-top:2px}
 
 /* ---------- stops ---------- */
 .stops{list-style:none;margin:0;padding:0}
@@ -199,6 +200,75 @@ h3.sec:first-of-type{margin-top:6px}
 .row.hot .v{color:var(--cinnabar)}
 .note{font-size:13px;color:var(--mute);margin:10px 2px 0;line-height:1.5}
 
+/* ---------- mappa ---------- */
+.mapwrap{margin:0 0 18px}
+.maplab{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--jade);
+  display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  margin:0 0 6px;
+}
+.maplab .span{color:var(--mute);letter-spacing:.06em;text-transform:none;font-size:10.5px}
+.map{
+  height:250px;border:1px solid var(--line);border-radius:3px;
+  background:var(--paper);overflow:hidden;
+}
+.map.tall{height:340px}
+/* I tile Amap sono più squillanti della pagina: si smorzano un filo per
+   farli stare dentro la stessa tavolozza senza perdere leggibilità. */
+.map .leaflet-tile-pane{filter:saturate(.82) contrast(1.02)}
+.map .leaflet-container{background:var(--paper);font-family:var(--body)}
+.mapfoot{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;
+  color:var(--mute);margin-top:5px;
+}
+.mapfoot button{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--paper);border:1px solid var(--line);color:var(--jade);
+  border-radius:2px;padding:3px 7px;cursor:pointer;
+}
+.mapfoot .off{color:var(--gold)}
+
+/* segnaposto */
+.pin{
+  display:grid;place-items:center;
+  width:26px;height:26px;border-radius:50%;
+  background:var(--cinnabar);color:#fff;
+  font-family:var(--mono);font-size:12px;font-weight:500;line-height:1;
+  box-shadow:0 0 0 2px var(--paper),0 1px 3px rgba(20,32,29,.4);
+  transition:transform .16s ease;
+}
+.pin--opt{background:var(--gold)}
+.pin--on{transform:scale(1.28)}
+.pin--base{background:var(--ink)}
+.pin--base.pin--here{background:var(--cinnabar)}
+.row .num{
+  display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;
+  background:var(--ink);color:var(--paper);
+  font-family:var(--mono);font-size:10px;font-style:normal;font-weight:500;
+  margin-right:7px;vertical-align:1px;
+}
+.row.hot .num{background:var(--cinnabar)}
+.row[data-base]{cursor:pointer}
+.stop.on .card h2{color:var(--cinnabar)}
+.stop.on .thread::after{background:var(--cinnabar);border-color:var(--cinnabar)}
+
+/* controlli Leaflet, ridisegnati come il resto */
+.map .leaflet-control-zoom a{
+  background:var(--paper);color:var(--ink);border-color:var(--line);
+  font-family:var(--body);font-weight:400;
+}
+.map .leaflet-control-zoom a:hover{background:var(--line-soft)}
+.map .leaflet-control-scale-line{
+  border-color:var(--mute);color:var(--ink-2);background:rgba(244,247,243,.78);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.04em;
+}
+.map .leaflet-control-attribution{
+  background:rgba(244,247,243,.8);font-family:var(--mono);font-size:9px;color:var(--mute);
+}
+.map .leaflet-control-attribution a{color:var(--jade)}
+
 /* ---------- bottom bar ---------- */
 .bar{
   position:fixed;left:0;right:0;bottom:0;z-index:30;
@@ -244,13 +314,15 @@ h3.sec:first-of-type{margin-top:6px}
 <nav class="bar">
   <button class="arrow" id="prev" aria-label="Giorno precedente">‹</button>
   <button id="tabDays" aria-current="page">Giorni</button>
+  <button id="tabMap">Mappa</button>
   <button id="tabLog">Logistica</button>
   <button class="arrow" id="next" aria-label="Giorno successivo">›</button>
 </nav>
 
 <div id="toast" role="status" aria-live="polite"></div>
 
-<script>
+<script src="leaflet.js"></script>
+<script type="module">
 const CN = ["一","二","三","四","五","六","七","八","九","十","十一","十二","十三","十四"];
 
 const DAYS = [
@@ -329,7 +401,7 @@ const DAYS = [
 {date:"2026-09-14", wd:"lun", title:"Yuanjiajie e Tianzi", base:"Wulingyuan",
  narr:"Le piattaforme panoramiche. Il biglietto del parco vale quattro giorni, quindi oggi e domani sono lo stesso biglietto.",
  stops:[
-  {t:"08:00", n:"Yuanjiajie", d:"I pilastri di Avatar dalle piattaforme alte. Navetta interna dalla porta est. Presto: dopo le 10 arrivano i gruppi."},
+  {t:"08:00", n:"Yuanjiajie", ll:[29.34732,110.44021], d:"I pilastri di Avatar dalle piattaforme alte. Navetta interna dalla porta est. Presto: dopo le 10 arrivano i gruppi."},
   {t:"11:00", n:"Ascensore Bailong", ll:[29.3458,110.47254], d:"Chi ci è stato consiglia di prenderlo in discesa per evitare le code peggiori."},
   {t:"14:00", n:"Monte Tianzi", ll:[29.379323,110.463655], d:"I panorami migliori del parco. Sali in funivia e scendi a piedi (un'ora e mezza). Attenzione alle scimmie sul sentiero delle Dieci Miglia."}
  ]},
@@ -409,11 +481,18 @@ const DAFARE = [
  ["Passaporto","subito","Almeno sei mesi di validità residua all'ingresso. È l'unica cosa con tempi lunghi.",false]
 ];
 
+import {
+  toGCJ, toWGS, haversine, splitFrames, frameLabels, boundsOf, fmtDistance
+} from "./geo.js";
+
 /* ---------- helpers ---------- */
 const $ = s => document.querySelector(s);
 const view = $("#view"), rail = $("#rail");
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let day = 0, tab = "days";
+
+/* Nomi delle otto basi: servono a riconoscere che "volo serale" non è un posto. */
+const NOMI_BASI = new Set(BASI.map(b => b[0]));
 
 function toast(msg){
   const t = $("#toast"); t.textContent = msg; t.classList.add("on");
@@ -424,8 +503,99 @@ function fmtDate(iso){
   const mesi = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
   return d + " " + mesi[m-1];
 }
-function amap(ll,n){ return "https://uri.amap.com/marker?position=" + ll[1] + "," + ll[0] + "&name=" + encodeURIComponent(n); }
-function gmap(ll){ return "https://www.google.com/maps/search/?api=1&query=" + ll[0] + "," + ll[1]; }
+/* Amap vuole GCJ-02, Google vuole WGS-84. Le coordinate salvate sono GCJ nel
+   continente e WGS a Hong Kong: geo.js normalizza, così per la prima volta
+   tutti e due i pulsanti puntano al posto giusto. */
+function amap(ll,n){ const g = toGCJ(ll); return "https://uri.amap.com/marker?position=" + g[1] + "," + g[0] + "&name=" + encodeURIComponent(n); }
+function gmap(ll){ const w = toWGS(ll); return "https://www.google.com/maps/search/?api=1&query=" + w[0] + "," + w[1]; }
+function coordText(ll){ const g = toGCJ(ll); return g[0].toFixed(6) + ", " + g[1].toFixed(6); }
+
+/* ---------- mappa ---------- */
+const TILE = "https://webrd0{s}.is.autonavi.com/appmaptile?lang={lang}&size=1&scale=1&style=8&x={x}&y={y}&z={z}";
+const LANG_KEY = "cina2026.maplang";
+let mapLang = localStorage.getItem(LANG_KEY) || "en";
+let liveMaps = [];
+
+function killMaps(){
+  liveMaps.forEach(m => { try { m.remove(); } catch(e){} });
+  liveMaps = [];
+}
+
+function tileLayer(){
+  return L.tileLayer(TILE.replace("{lang}", mapLang === "zh" ? "zh_cn" : "en"), {
+    subdomains: ["1","2","3","4"],
+    minZoom: 3, maxZoom: 18,
+    crossOrigin: true,
+    attribution: "&copy; 高德地图 AutoNavi"
+  });
+}
+
+/**
+ * Disegna una mappa dentro `el`.
+ * points: [{ll, label, opt, onSelect}]  — già in coordinate salvate
+ * Se i tile non arrivano (aereo, Grande Firewall, niente rete) restano
+ * comunque il tracciato, i numeri e la barra di scala: la mappa non
+ * diventa mai un rettangolo vuoto.
+ */
+function drawMap(el, points, opts){
+  opts = opts || {};
+  const latlngs = points.map(p => toGCJ(p.ll));
+  const b = boundsOf(latlngs, opts.pad);
+  const map = L.map(el, {
+    zoomControl: opts.zoomControl !== false,
+    scrollWheelZoom: false,
+    attributionControl: true,
+    tap: true
+  });
+  liveMaps.push(map);
+  // attributionControl è un booleano: il prefisso si toglie dal controllo.
+  if (map.attributionControl) map.attributionControl.setPrefix("");
+  map.fitBounds(b, { padding: [12,12], maxZoom: opts.maxZoom || 16 });
+
+  const tiles = tileLayer();
+  let failed = 0;
+  tiles.on("tileerror", () => {
+    if (++failed === 3 && opts.onOffline) opts.onOffline();
+  });
+  tiles.addTo(map);
+
+  if (latlngs.length > 1 && !opts.noRoute) {
+    L.polyline(latlngs, {
+      color: opts.legColor || "#3F7264",
+      weight: 2, opacity: .8,
+      dashArray: opts.dashed ? "5,5" : null
+    }).addTo(map);
+  }
+
+  const markers = points.map((p, i) => {
+    const icon = L.divIcon({
+      className: "",
+      html: '<div class="pin' + (p.opt ? " pin--opt" : "") + (p.base ? " pin--base" : "")
+          + (p.here ? " pin--here" : "") + '">' + esc(p.label) + "</div>",
+      iconSize: [26,26],
+      iconAnchor: [13,13]
+    });
+    const m = L.marker(latlngs[i], { icon, title: p.title || "", keyboard: true }).addTo(map);
+    if (p.onSelect) m.on("click", () => p.onSelect(i));
+    return m;
+  });
+
+  // Il contenitore nasce dentro innerHTML: senza questo Leaflet misura 0.
+  requestAnimationFrame(() => map.invalidateSize());
+  L.control.scale({ metric: true, imperial: false, position: "bottomleft" }).addTo(map);
+  return { map, markers };
+}
+
+/** Estensione del riquadro, per l'etichetta ("1,7 km"). */
+function frameSpan(stops){
+  const pts = stops.filter(s => s.ll).map(s => s.ll);
+  if (pts.length < 2) return "";
+  let max = 0;
+  for (let i = 0; i < pts.length; i++)
+    for (let j = i+1; j < pts.length; j++)
+      max = Math.max(max, haversine(pts[i], pts[j]));
+  return fmtDistance(max);
+}
 
 /* ---------- render ---------- */
 function renderRail(){
@@ -437,10 +607,9 @@ function renderRail(){
   if(act) act.scrollIntoView({block:"nearest", inline:"center", behavior:"smooth"});
 }
 
-function renderDay(){
-  const d = DAYS[day];
-  const stops = d.stops.map(s => `
-    <li class="stop${s.opt?" opt":""}">
+function stopItem(s, n){
+  return `
+    <li class="stop${s.opt?" opt":""}" data-stop="${n}">
       <div class="time">${esc(s.t)}</div>
       <div class="thread"><div class="card">
         <h2>${esc(s.n)}${s.opt?'<span class="tag">opzione</span>':""}</h2>
@@ -448,10 +617,48 @@ function renderDay(){
         ${s.ll ? `<div class="acts">
           <a class="act" href="${amap(s.ll, s.n)}" target="_blank" rel="noopener">Amap</a>
           <a class="act" href="${gmap(s.ll)}" target="_blank" rel="noopener">Google</a>
-          <button class="act" data-copy="${s.ll[0]}, ${s.ll[1]}">Copia coord.</button>
+          <button class="act" data-copy="${coordText(s.ll)}">Copia coord.</button>
         </div>` : ""}
       </div></div>
-    </li>`).join("");
+    </li>`;
+}
+
+function transferStrip(d){
+  return `<div class="trstrip">
+      <span class="lbl">Treno</span>
+      <span class="route">${esc(d.tr.route)}</span>
+      <span class="det">${esc(d.tr.det)}</span>
+    </div>`;
+}
+
+function renderDay(){
+  const d = DAYS[day];
+  const frames = splitFrames(d.stops);
+  const labels = frameLabels(d, frames, DAYS[day-1], NOMI_BASI);
+
+  // Numerazione continua su tutta la giornata, non per riquadro.
+  let counter = 0;
+  const numbered = frames.map(f => f.map(s => ({ s, n: s.ll ? ++counter : null })));
+
+  const blocks = numbered.map((f, i) => {
+    const withLL = f.filter(x => x.n !== null);
+    const span = frameSpan(f.map(x => x.s));
+    const mapHTML = withLL.length ? `
+      <div class="mapwrap">
+        <div class="maplab">
+          <span>${esc(labels[i] || "")}</span>
+          ${span ? `<span class="span">${esc(span)} da capo a fondo</span>` : ""}
+        </div>
+        <div class="map" id="map${i}"></div>
+        <div class="mapfoot">
+          <span id="mapnote${i}"></span>
+          <button data-lang>${mapLang === "zh" ? "中文" : "English"}</button>
+        </div>
+      </div>` : "";
+    // Il treno sta fra i due riquadri: è lì che succede.
+    const tr = (i === 1 && d.tr && frames.length === 2) ? transferStrip(d) : "";
+    return tr + mapHTML + `<ul class="stops">${f.map(x => stopItem(x.s, x.n)).join("")}</ul>`;
+  }).join("");
 
   view.innerHTML = `
     <div class="dayhead">
@@ -461,21 +668,155 @@ function renderDay(){
         <h1>${esc(d.title)}</h1>
       </div>
     </div>
-    ${d.tr ? `<div class="transfer">
-      <span class="lbl">Treno</span>
-      <span class="route">${esc(d.tr.route)}</span>
-      <span class="det">${esc(d.tr.det)}</span>
-    </div>` : ""}
+    ${d.tr && frames.length < 2 ? transferStrip(d) : ""}
     ${d.narr ? `<p class="narr">${esc(d.narr)}</p>` : ""}
-    <ul class="stops">${stops}</ul>
+    ${blocks}
     <div class="pager">
       <button id="pPrev" ${day===0?"disabled":""}><span class="k">Prima</span>${day>0?esc(DAYS[day-1].title):"—"}</button>
       <button class="next" id="pNext" ${day===DAYS.length-1?"disabled":""}><span class="k">Poi</span>${day<DAYS.length-1?esc(DAYS[day+1].title):"—"}</button>
     </div>`;
 
+  numbered.forEach((f, i) => {
+    const withLL = f.filter(x => x.n !== null);
+    const el = $("#map" + i);
+    if (!el || !withLL.length) return;
+    const note = $("#mapnote" + i);
+    const drawn = drawMap(el, withLL.map(x => ({
+      ll: x.s.ll, label: String(x.n), opt: !!x.s.opt, title: x.s.n,
+      onSelect: () => selectStop(x.n)
+    })), {
+      // Una tappa sola (Jinshanling, la base dei panda) sta fuori città: se ci
+      // si avvicina troppo si vede solo bosco. Meglio stare larghi e mostrare
+      // le strade intorno, che è l'unica cosa che serve sapere.
+      maxZoom: withLL.length === 1 ? 13 : 16,
+      onOffline: () => { if (note) { note.textContent = "senza rete · solo posizioni"; note.className = "off"; } }
+    });
+    frameMarkers.set(i, { drawn, nums: withLL.map(x => x.n) });
+  });
+
   const pp = $("#pPrev"), pn = $("#pNext");
   if(pp) pp.onclick = () => go(day-1);
   if(pn) pn.onclick = () => go(day+1);
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+const frameMarkers = new Map();
+
+/** Evidenzia insieme il segnaposto e la scheda, da qualsiasi lato si parta. */
+function selectStop(n){
+  document.querySelectorAll(".stop.on").forEach(el => el.classList.remove("on"));
+  document.querySelectorAll(".pin--on").forEach(el => el.classList.remove("pin--on"));
+  const li = document.querySelector('[data-stop="' + n + '"]');
+  if (li) {
+    li.classList.add("on");
+    li.scrollIntoView({ block: "center", behavior: "smooth" });
+  }
+  frameMarkers.forEach(({ drawn, nums }) => {
+    const idx = nums.indexOf(n);
+    if (idx < 0) return;
+    const pin = drawn.markers[idx].getElement();
+    if (pin && pin.firstChild) pin.firstChild.classList.add("pin--on");
+  });
+}
+
+/** La base vera di un giorno: l'ultima notte "volo serale" non è un posto. */
+function baseOf(i){
+  const b = DAYS[i].base;
+  if (NOMI_BASI.has(b)) return b;
+  return i > 0 ? baseOf(i-1) : b;
+}
+
+/**
+ * Posizione di ogni base, ricavata dalle tappe stesse.
+ * Va usato il riquadro, non la giornata: l'11 settembre si dorme a Chengdu ma
+ * metà delle tappe sono ancora a Xi'an, e attribuirle tutte a Chengdu piazza
+ * Chengdu sopra Xi'an. Le tappe di un riquadro che non è una base (la Muraglia
+ * a Jinshanling) non contano per nessuna città.
+ */
+function baseCentroids(){
+  const bag = new Map();
+  DAYS.forEach((d, i) => {
+    const frames = splitFrames(d.stops);
+    const labels = frameLabels(d, frames, DAYS[i-1], NOMI_BASI);
+    frames.forEach((f, k) => {
+      const b = labels[k];
+      if (!NOMI_BASI.has(b)) return;
+      if (!bag.has(b)) bag.set(b, []);
+      f.forEach(s => { if (s.ll) bag.get(b).push(toGCJ(s.ll)); });
+    });
+  });
+  const med = a => { const v = [...a].sort((x,y) => x-y); return v[Math.floor(v.length/2)]; };
+  const out = new Map();
+  bag.forEach((pts, b) => {
+    if (pts.length) out.set(b, [med(pts.map(p => p[0])), med(pts.map(p => p[1]))]);
+  });
+  return out;
+}
+
+/** Le tratte fra una base e la successiva, con l'indicazione se è un treno. */
+function legs(){
+  const out = [];
+  for (let i = 1; i < DAYS.length; i++) {
+    const from = baseOf(i-1), to = baseOf(i);
+    if (from !== to) out.push({ from, to, train: !!DAYS[i].tr, day: i });
+  }
+  return out;
+}
+
+function renderOverview(){
+  const cents = baseCentroids();
+  const ls = legs();
+  const here = baseOf(day);
+  const notti = new Map(BASI.map(b => [b[0], b[2]]));
+
+  view.innerHTML = `
+    <div class="dayhead">
+      <div class="seal sm">路</div>
+      <div><div class="eyebrow">6 → 19 settembre 2026 · ${cents.size} basi · ${ls.length} spostamenti</div>
+      <h1>Il viaggio</h1></div>
+    </div>
+    <div class="mapwrap">
+      <div class="maplab">
+        <span>Pechino → Hong Kong</span>
+        <span class="span">tocca una città per andare a quel giorno</span>
+      </div>
+      <div class="map tall" id="mapAll"></div>
+      <div class="mapfoot">
+        <span id="mapnoteAll"></span>
+        <button data-lang>${mapLang === "zh" ? "中文" : "English"}</button>
+      </div>
+    </div>
+    <h3 class="sec">Le otto basi</h3>
+    <div class="rows">${BASI.map((b, i) => `
+      <div class="row${b[0] === here ? " hot" : ""}" data-base="${i}">
+        <span class="k"><em class="num">${i+1}</em>${esc(b[0])}</span><span class="v">${esc(b[1])} · ${esc(b[2])}</span>
+      </div>`).join("")}</div>`;
+
+  const el = $("#mapAll");
+  const order = BASI.map(b => b[0]).filter(b => cents.has(b));
+  const note = $("#mapnoteAll");
+
+  // Numeri, non nomi: a scala nazionale Guilin e Yangshuo distano 55 km e
+  // nessuna etichetta scritta ci sta senza coprire l'altra. I nomi stanno
+  // nell'elenco qui sotto, con gli stessi numeri.
+  const drawn = drawMap(el, order.map((b, i) => ({
+    ll: cents.get(b), label: String(i+1), base: true, here: b === here, title: b,
+    onSelect: () => { const k = DAYS.findIndex((d,j) => baseOf(j) === b); if (k >= 0) go(k); }
+  })), {
+    pad: 0.10, maxZoom: 9, zoomControl: true, noRoute: true,
+    onOffline: () => { if (note) { note.textContent = "senza rete · solo posizioni"; note.className = "off"; } }
+  });
+
+  ls.forEach(l => {
+    const a = cents.get(l.from), b = cents.get(l.to);
+    if (!a || !b) return;
+    L.polyline([a, b], {
+      color: l.train ? "#BC3B2E" : "#3F7264",
+      weight: 2, opacity: .85,
+      dashArray: l.train ? null : "4,4"
+    }).addTo(drawn.map);
+  });
+
   window.scrollTo({top:0, behavior:"instant"});
 }
 
@@ -510,14 +851,22 @@ function renderLog(){
       <div class="row"><span class="k">Ginevra → Pechino</span><span class="v">5 set</span><span class="d">Atterraggio il 6 nel primo pomeriggio.</span></div>
       <div class="row"><span class="k">Hong Kong → Ginevra</span><span class="v">19 set</span><span class="d">Dalle 19 in poi. Il programma di Lantau regge solo con questo orario.</span></div>
     </div>
-    <p class="note">I link Amap funzionano in Cina continentale, quelli Google a Hong Kong (o con VPN). In Cina i due sistemi usano griglie di coordinate diverse: aspettati uno scarto di qualche centinaio di metri e fidati del nome del posto più che del puntino.</p>`;
+    <p class="note">I link Amap funzionano in Cina continentale, quelli Google a Hong Kong (o con VPN). I due sistemi usano griglie di coordinate diverse — circa mezzo chilometro di scarto — ma la conversione ora è fatta dall'app: ogni pulsante manda l'app giusta al posto giusto. Il tasto «Copia coord.» copia la coordinata cinese (GCJ-02), quella da incollare in Amap, WeChat o Didi.</p>
+    <p class="note">Le mappe sono di Amap: si vedono anche dalla Cina continentale, senza VPN. I riquadri già guardati restano in memoria, quindi vale la pena aprire la giornata dopo mentre sei ancora sul wi-fi dell'albergo. Senza rete restano il tracciato, i numeri e le distanze.</p>`;
   window.scrollTo({top:0, behavior:"instant"});
 }
 
 function render(){
-  if(tab === "days") renderDay(); else renderLog();
+  // Le mappe vecchie vanno chiuse prima di buttare via il loro contenitore,
+  // altrimenti Leaflet resta attaccato a nodi che non esistono più.
+  killMaps();
+  frameMarkers.clear();
+  if(tab === "days") renderDay();
+  else if(tab === "map") renderOverview();
+  else renderLog();
   renderRail();
   $("#tabDays").setAttribute("aria-current", tab==="days" ? "page" : "false");
+  $("#tabMap").setAttribute("aria-current", tab==="map" ? "page" : "false");
   $("#tabLog").setAttribute("aria-current", tab==="log" ? "page" : "false");
   $("#prev").disabled = (tab!=="days" || day===0);
   $("#next").disabled = (tab!=="days" || day===DAYS.length-1);
@@ -545,6 +894,23 @@ rail.addEventListener("click", e => {
   const b = e.target.closest(".chip"); if(b) go(+b.dataset.i);
 });
 view.addEventListener("click", e => {
+  const lang = e.target.closest("[data-lang]");
+  if(lang){
+    mapLang = mapLang === "zh" ? "en" : "zh";
+    localStorage.setItem(LANG_KEY, mapLang);
+    toast(mapLang === "zh" ? "Mappa in cinese" : "Mappa in inglese");
+    render();
+    return;
+  }
+  const row = e.target.closest("[data-base]");
+  if(row){
+    const nome = BASI[+row.dataset.base][0];
+    const i = DAYS.findIndex((d,k) => baseOf(k) === nome);
+    if(i >= 0) go(i);
+    return;
+  }
+  const card = e.target.closest("[data-stop]");
+  if(card && !e.target.closest(".acts")){ selectStop(+card.dataset.stop); return; }
   const b = e.target.closest("[data-copy]"); if(!b) return;
   const txt = b.dataset.copy;
   if(navigator.clipboard && window.isSecureContext){
@@ -554,15 +920,20 @@ view.addEventListener("click", e => {
 $("#prev").onclick = () => go(day-1);
 $("#next").onclick = () => go(day+1);
 $("#tabDays").onclick = () => { tab = "days"; render(); };
+$("#tabMap").onclick = () => { tab = "map"; render(); };
 $("#tabLog").onclick = () => { tab = "log"; render(); };
 document.addEventListener("keydown", e => {
   if(e.key === "ArrowLeft") go(day-1);
   if(e.key === "ArrowRight") go(day+1);
 });
-let sx = 0, sy = 0;
-document.addEventListener("touchstart", e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, {passive:true});
+let sx = 0, sy = 0, swipeOK = true;
+document.addEventListener("touchstart", e => {
+  sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+  // Trascinare la mappa è trascinare la mappa, non cambiare giorno.
+  swipeOK = !e.target.closest(".map");
+}, {passive:true});
 document.addEventListener("touchend", e => {
-  if(tab !== "days") return;
+  if(tab !== "days" || !swipeOK) return;
   const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
   if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 2) go(day + (dx < 0 ? 1 : -1));
 }, {passive:true});
