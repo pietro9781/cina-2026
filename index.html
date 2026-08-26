@@ -450,7 +450,7 @@ const DAYS = [
 
 const BASI = [
  ["Pechino","6 → 10 set","4 notti","Prenotato · zona Gulou/Houhai",true],
- ["Xi'an","10 → 11 set","1 notte","Vicino alla Torre della Campana: il quartiere musulmano è a piedi",false],
+ ["Xi'an","10 → 11 set","1 notte","Vicino alla Torre della Campana: il quartiere musulmano è a piedi",true],
  ["Chengdu","11 → 12 set","1 notte","Vicino ai vicoli Kuanzhai o al People's Park",false],
  ["Chongqing","12 → 13 set","1 notte","Jiefangbei. Domani si parte da Chongqing Est",false],
  ["Wulingyuan","13 → 16 set","3 notti","Porta est del parco, non Zhangjiajie città",false],
@@ -460,7 +460,7 @@ const BASI = [
 ];
 
 const TRENI = [
- ["10 set","Pechino Ovest → Xi'an Nord","Il primo G del mattino, 06:38–08:00 · 4h10–5h. Regge l'Esercito: non c'è un secondo tentativo."],
+ ["10 set","Pechino Ovest → Xi'an Nord","Il primo G del mattino, 06:38–08:00 · 4h10–5h. Regge l'Esercito: non c'è un secondo tentativo.",true],
  ["11 set","Xi'an Nord → Chengdu Est","Verso mezzogiorno · 3h · frequente"],
  ["12 set","Chengdu Est → Chongqing Est","Dopo pranzo · 1h15 · frequente"],
  ["13 set","Chongqing Est → Zhangjiajie Ovest","~8:00 · solo da Chongqing Est"],
@@ -469,7 +469,7 @@ const TRENI = [
 ];
 
 const DAFARE = [
- ["Biglietti Pechino → Xi'an del 10","26 ago","In vendita da oggi. Metti la sveglia: la finestra cinese è di circa due settimane.",true],
+ ["Biglietti Pechino → Xi'an del 10","26 ago","Comprato il 26 agosto.",false,true],
  ["D3967 Zhangjiajie → Guilin","1 set · 02:00","Ora italiana. Uno solo al giorno: se salta, si passa da Changsha.",true],
  ["Treno Guilin → Hong Kong","3 set · 02:00","Ora italiana. Tre corse al giorno, regole proprie per il transfrontaliero.",true],
  ["Prenotazione Tian'anmen","1–7 giorni prima","Su WeChat, con passaporto. Separata dalla Città Proibita, nessun same-day.",false],
@@ -827,15 +827,17 @@ function renderLog(){
       ${b[3]?`<span class="d">${esc(b[3])}</span>`:""}
     </div>`).join("");
   const treni = TRENI.map(t => `
-    <div class="row">
+    <div class="row${t[3]?" done":""}">
       <span class="k">${esc(t[1])}</span><span class="v">${esc(t[0])}</span>
       <span class="d">${esc(t[2])}</span>
     </div>`).join("");
+  // Una voce fatta smette di essere urgente: spunta al posto della scadenza.
   const df = DAFARE.map(x => `
-    <div class="row${x[3]?" hot":""}">
-      <span class="k">${esc(x[0])}</span><span class="v">${esc(x[1])}</span>
+    <div class="row${x[4]?" done":x[3]?" hot":""}">
+      <span class="k">${esc(x[0])}</span><span class="v">${x[4]?"fatto":esc(x[1])}</span>
       ${x[2]?`<span class="d">${esc(x[2])}</span>`:""}
     </div>`).join("");
+  const restano = DAFARE.filter(x => !x[4]).length;
 
   view.innerHTML = `
     <div class="dayhead">
@@ -843,7 +845,7 @@ function renderLog(){
       <div><div class="eyebrow">6 → 19 settembre 2026 · 3 persone</div>
       <h1>Logistica</h1></div>
     </div>
-    <h3 class="sec">Da prenotare</h3><div class="rows">${df}</div>
+    <h3 class="sec">Da prenotare · ne restano ${restano}</h3><div class="rows">${df}</div>
     <p class="note">Niente visto: fino al 31 dicembre 2026 i cittadini italiani con passaporto ordinario entrano in Cina continentale senza visto per soggiorni fino a 30 giorni. Tieni a portata la prova dell'uscita entro i 30 giorni — il treno per Hong Kong la copre.</p>
     <h3 class="sec">Otto basi, otto prenotazioni</h3><div class="rows">${basi}</div>
     <h3 class="sec">Sei treni</h3><div class="rows">${treni}</div>
