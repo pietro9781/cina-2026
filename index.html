@@ -360,14 +360,16 @@ const DAYS = [
  stops:[
   {t:"09:00", n:"Grande Muraglia · Jinshanling", ll:[40.702468,117.233702], d:"2h30 di auto, parti alle 6:00. Il jet lag ormai è passato: è per questo che la Muraglia sta al quarto giorno e non al secondo. 3–4 ore sul crinale, torri ogni cento metri, quasi nessuno. Scarpe da trekking."},
   {t:"18:00", n:"Bodhi Therapeutic Retreat", ll:[39.9336995,116.4482831], d:"Massaggio su Gongti Beilu, rientrando. Dopo Jinshanling non è un lusso."},
-  {t:"19:45", n:"Taikoo Li Sanlitun", ll:[39.935886,116.455419], d:"Cena all'Edificio 1, poi a letto presto: domani il treno per Xi'an parte tra le 6:38 e le 8:00. Evita Shengyongxing e 1949, sono anatra e l'hai già fatta."}
+  {t:"19:45", n:"Taikoo Li Sanlitun", ll:[39.935886,116.455419], d:"Cena all'Edificio 1, poi a letto presto: domani il treno per Xi'an parte alle 7:55 e la sveglia è alle 5:45. Evita Shengyongxing e 1949, sono anatra e l'hai già fatta."}
  ]},
 
 {date:"2026-09-10", wd:"gio", title:"Treno presto, Terracotta il pomeriggio", base:"Xi'an",
- tr:{route:"Pechino Ovest → Xi'an Nord", det:"Un G tra le 06:38 e le 08:00 · 4h10–5h"},
- narr:"All'arrivo lasci i bagagli in deposito (il check-in è alle 14, tu riparti subito) e vai a est.",
+ tr:{route:"Pechino Ovest → Xi'an Nord", det:"Partenza 07:55 · 4h10–5h · arrivo fra mezzogiorno e l'una · 2ª classe, 3 posti"},
+ narr:"Giornata decisa dal treno delle 7:55: si arriva a Xi'an all'ora di pranzo, bagagli in deposito e subito a est. Il check-in in albergo è alle 14 e tu non ci passi.",
  stops:[
-  {t:"13:30", n:"Esercito di Terracotta", ll:[34.3841153,109.2784918], d:"Il cuore del viaggio, e non c'è un secondo tentativo. Con il primo G sei qui all'una, con quello delle 8 alle due. Fossa 1, poi 3 e 2. Dalle 16 la folla dei pullman si scioglie."},
+  {t:"06:55", n:"Pechino Ovest", ll:[39.894956,116.321206], d:"Un'ora prima della partenza: col passaporto il controllo è a mano e la stazione è enorme. Dall'albergo sono 8 km, mezz'ora scarsa di taxi a quell'ora: esci alle 6:20."},
+  {t:"12:30", n:"Xi'an Nord", ll:[34.376028,108.938606], d:"Arrivo fra mezzogiorno e l'una a seconda del G. Bagagli nel deposito della stazione: in albergo non ci passi. Da qui all'Esercito è un'ora e un quarto in taxi, quasi due con metro linea 4 più bus 306."},
+  {t:"14:00", n:"Esercito di Terracotta", ll:[34.3841153,109.2784918], d:"Il cuore del viaggio, e non c'è un secondo tentativo. Con il treno delle 7:55 arrivi alle due: il pomeriggio basta, ma controlla l'ora dell'ultimo ingresso prima di partire. Fossa 1, poi 3 e 2. Dalle 16 la folla dei pullman si scioglie."},
   {t:"19:00", n:"Torre della Campana", ll:[34.2594667,108.9470197], d:"Rientro in città, a piedi dall'albergo. Duecento metri a ovest la Torre del Tamburo, il cui arco è l'ingresso del quartiere musulmano."},
   {t:"19:45", n:"Quartiere musulmano", ll:[34.261498,108.938791], d:"Roujiamo, spiedini di agnello al cumino, noodles biang biang."}
  ]},
@@ -460,7 +462,7 @@ const BASI = [
 ];
 
 const TRENI = [
- ["10 set","Pechino Ovest → Xi'an Nord","Il primo G del mattino, 06:38–08:00 · 4h10–5h. Regge l'Esercito: non c'è un secondo tentativo.",true],
+ ["10 set","Pechino Ovest → Xi'an Nord","07:55 · 4h10–5h · 2ª classe, 3 posti. Regge l'Esercito: non c'è un secondo tentativo.",true],
  ["11 set","Xi'an Nord → Chengdu Est","Verso mezzogiorno · 3h · frequente"],
  ["12 set","Chengdu Est → Chongqing Est","Dopo pranzo · 1h15 · frequente"],
  ["13 set","Chongqing Est → Zhangjiajie Ovest","~8:00 · solo da Chongqing Est"],
@@ -469,7 +471,7 @@ const TRENI = [
 ];
 
 const DAFARE = [
- ["Biglietti Pechino → Xi'an del 10","26 ago","Comprato il 26 agosto.",false,true],
+ ["Biglietti Pechino → Xi'an del 10","26 ago","Comprato il 26 agosto: G delle 07:55, 2ª classe, 3 posti.",false,true],
  ["D3967 Zhangjiajie → Guilin","1 set · 02:00","Ora italiana. Uno solo al giorno: se salta, si passa da Changsha.",true],
  ["Treno Guilin → Hong Kong","3 set · 02:00","Ora italiana. Tre corse al giorno, regole proprie per il transfrontaliero.",true],
  ["Prenotazione Tian'anmen","1–7 giorni prima","Su WeChat, con passaporto. Separata dalla Città Proibita, nessun same-day.",false],
