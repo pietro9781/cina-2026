@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14201D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cina 2026">
+<title>Cina · 6–19 settembre 2026</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<style>
+:root{
+  --ink:#14201D;
+  --ink-2:#33443E;
+  --mute:#6E7F78;
+  --celadon:#D9E2DC;
+  --paper:#F4F7F3;
+  --line:#C2D0C8;
+  --line-soft:#DCE5DF;
+  --cinnabar:#BC3B2E;
+  --jade:#3F7264;
+  --gold:#9C7B33;
+  --display:ui-serif,"New York",Georgia,"Times New Roman",serif;
+  --body:-apple-system,system-ui,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,"Roboto Mono",monospace;
+  --bar:calc(58px + env(safe-area-inset-bottom));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--celadon);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:none;
+}
+:focus-visible{outline:2px solid var(--cinnabar);outline-offset:2px;border-radius:2px}
+
+/* ---------- header ---------- */
+header{
+  position:sticky;top:0;z-index:20;
+  background:var(--ink);
+  color:var(--paper);
+  padding:calc(10px + env(safe-area-inset-top)) 0 0;
+  box-shadow:0 1px 0 rgba(0,0,0,.2);
+}
+.brandrow{
+  display:flex;align-items:baseline;justify-content:space-between;
+  padding:0 16px 10px;
+}
+.brand{
+  font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:#9FB3AB;
+}
+.brand b{color:var(--paper);font-weight:500}
+.countdown{
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:#9FB3AB;
+}
+.countdown span{color:var(--cinnabar);font-weight:500}
+
+.rail{
+  display:flex;gap:6px;overflow-x:auto;scroll-snap-type:x proximity;
+  padding:0 16px 12px;scrollbar-width:none;
+}
+.rail::-webkit-scrollbar{display:none}
+.chip{
+  flex:0 0 auto;scroll-snap-align:center;
+  border:1px solid rgba(244,247,243,.22);
+  background:transparent;color:#B9C9C2;
+  border-radius:3px;padding:5px 9px 6px;
+  font-family:var(--mono);font-size:11px;line-height:1.25;
+  text-align:center;cursor:pointer;min-width:46px;
+  transition:background .18s ease,color .18s ease,border-color .18s ease;
+}
+.chip .wd{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.chip .dn{display:block;font-size:14px;font-weight:500}
+.chip[aria-selected="true"]{
+  background:var(--cinnabar);border-color:var(--cinnabar);color:#fff;
+}
+.chip.transfer::after{
+  content:"";display:block;height:2px;width:14px;margin:3px auto 0;
+  background:currentColor;opacity:.55;
+}
+
+/* ---------- layout ---------- */
+main{padding:0 0 var(--bar)}
+.wrap{padding:18px 16px 26px;max-width:640px;margin:0 auto}
+
+/* ---------- day head ---------- */
+.dayhead{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+.seal{
+  flex:0 0 auto;width:56px;height:56px;border-radius:3px;
+  background:var(--cinnabar);color:#fff;
+  display:grid;place-items:center;
+  font-family:var(--display);font-size:23px;line-height:1;font-weight:600;
+  transform:rotate(-1.5deg);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.28), 0 2px 0 rgba(20,32,29,.12);
+}
+.seal.sm{width:38px;height:38px;font-size:16px}
+.dayhead h1{
+  font-family:var(--display);font-weight:600;
+  font-size:26px;line-height:1.12;margin:2px 0 4px;letter-spacing:-.01em;
+}
+.eyebrow{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--mute);
+}
+.base{color:var(--jade);font-weight:500}
+.narr{
+  font-size:15px;color:var(--ink-2);margin:0 0 16px;
+  padding-left:2px;
+}
+
+/* ---------- transfer strip ---------- */
+.transfer{
+  border:1px solid var(--line);border-left:3px solid var(--jade);
+  background:var(--paper);border-radius:3px;
+  padding:11px 13px;margin:0 0 18px;
+}
+.transfer .lbl{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--jade);display:block;margin-bottom:3px;
+}
+.transfer .route{font-weight:600;font-size:15px;display:block}
+.transfer .det{font-size:13.5px;color:var(--ink-2);display:block;margin-top:2px}
+
+/* ---------- stops ---------- */
+.stops{list-style:none;margin:0;padding:0}
+.stop{display:grid;grid-template-columns:50px 1fr;column-gap:12px;position:relative}
+.stop .time{
+  font-family:var(--mono);font-size:12.5px;color:var(--ink);
+  padding-top:14px;text-align:right;font-weight:500;
+}
+.thread{position:relative}
+.thread::before{
+  content:"";position:absolute;left:-12px;top:0;bottom:0;width:1px;background:var(--line);
+}
+.stop:first-child .thread::before{top:20px}
+.stop:last-child .thread::before{bottom:auto;height:20px}
+.thread::after{
+  content:"";position:absolute;left:-15px;top:18px;width:7px;height:7px;
+  border-radius:50%;background:var(--celadon);border:1.5px solid var(--jade);
+}
+.stop.opt .thread::after{border-color:var(--gold);border-style:dashed}
+.card{padding:12px 0 20px}
+.card h2{
+  font-family:var(--display);font-size:18.5px;font-weight:600;
+  margin:0 0 5px;line-height:1.2;letter-spacing:-.005em;
+}
+.card p{margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.52}
+.tag{
+  display:inline-block;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--gold);
+  border:1px solid var(--gold);border-radius:2px;padding:1px 5px;
+  vertical-align:2px;margin-left:6px;
+}
+.acts{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+.act{
+  font-family:var(--mono);font-size:11px;letter-spacing:.05em;
+  border:1px solid var(--line);background:var(--paper);color:var(--jade);
+  border-radius:3px;padding:5px 9px;text-decoration:none;cursor:pointer;
+  display:inline-block;
+}
+.act:active{background:var(--line-soft)}
+
+/* ---------- nav ---------- */
+.pager{display:flex;gap:10px;margin-top:6px}
+.pager button{
+  flex:1;font-family:var(--body);font-size:14px;font-weight:500;
+  background:var(--paper);border:1px solid var(--line);color:var(--ink);
+  border-radius:3px;padding:12px 10px;cursor:pointer;text-align:left;
+}
+.pager button:disabled{opacity:.35;cursor:default}
+.pager button .k{
+  display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--mute);margin-bottom:2px;
+}
+.pager .next{text-align:right}
+
+/* ---------- logistica ---------- */
+h3.sec{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--mute);
+  margin:28px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line);
+}
+h3.sec:first-of-type{margin-top:6px}
+.rows{display:flex;flex-direction:column;gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:3px;overflow:hidden}
+.row{background:var(--paper);padding:10px 12px;display:grid;grid-template-columns:1fr auto;gap:4px 10px}
+.row .k{font-weight:600;font-size:14.5px}
+.row .v{font-family:var(--mono);font-size:11.5px;color:var(--mute);text-align:right;white-space:nowrap}
+.row .d{grid-column:1/-1;font-size:13.5px;color:var(--ink-2);line-height:1.45}
+.row.done .k::after{content:" ✓";color:var(--jade)}
+.row.hot{border-left:3px solid var(--cinnabar)}
+.row.hot .v{color:var(--cinnabar)}
+.note{font-size:13px;color:var(--mute);margin:10px 2px 0;line-height:1.5}
+
+/* ---------- bottom bar ---------- */
+.bar{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;
+  background:var(--ink);
+  display:flex;align-items:stretch;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.bar button{
+  flex:1;background:none;border:0;color:#9FB3AB;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;padding:18px 4px;cursor:pointer;
+}
+.bar button[aria-current="page"]{color:var(--paper);box-shadow:inset 0 -2px 0 var(--cinnabar)}
+.bar .arrow{flex:0 0 52px;font-size:18px;letter-spacing:0;color:#9FB3AB}
+.bar .arrow:disabled{opacity:.28}
+
+/* ---------- toast ---------- */
+#toast{
+  position:fixed;left:50%;bottom:calc(var(--bar) + 14px);transform:translateX(-50%) translateY(8px);
+  background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:12px;
+  padding:9px 14px;border-radius:3px;opacity:0;pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;z-index:40;max-width:88vw;text-align:center;
+}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brandrow">
+    <div class="brand">Cina · <b>Pechino → Hong Kong</b></div>
+    <div class="countdown" id="countdown"></div>
+  </div>
+  <div class="rail" id="rail" role="tablist" aria-label="Giorni del viaggio"></div>
+</header>
+
+<main>
+  <div class="wrap" id="view"></div>
+</main>
+
+<nav class="bar">
+  <button class="arrow" id="prev" aria-label="Giorno precedente">‹</button>
+  <button id="tabDays" aria-current="page">Giorni</button>
+  <button id="tabLog">Logistica</button>
+  <button class="arrow" id="next" aria-label="Giorno successivo">›</button>
+</nav>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const CN = ["一","二","三","四","五","六","七","八","九","十","十一","十二","十三","十四"];
+
+const DAYS = [
+{date:"2026-09-06", wd:"dom", title:"Arrivo a Pechino", base:"Pechino",
+ narr:"Atterraggio nel primo pomeriggio, in centro verso le 17:30. Tutto entro 800 metri, niente prenotazioni, nessuna sveglia.",
+ stops:[
+  {t:"18:00", n:"Siji Minfu (Qianmen)", ll:[39.897062,116.39717], d:"Prima tappa solo per ritirare il numero: non si prenota e si aspetta 1–3 ore. Giri e torni verso le 20:00. Anatra laccata."},
+  {t:"18:15", n:"Yangmeizhu Xiejie", ll:[39.89556,116.39194], d:"Vicolo obliquo dentro Dashilan, rimesso a posto senza svuotarlo: librerie, caffè, gente che ci vive."},
+  {t:"19:15", n:"Beijing Fang", ll:[39.89871,116.3954], d:"Terrazze su un blocco anni '20 restaurato. Tramonto verso le 18:35, con Zhengyangmen che si illumina davanti."},
+  {t:"21:15", n:"Zhengyangmen", ll:[39.900558,116.397846], d:"Risali Qianmen Street fino in fondo. Torre e torre delle frecce illuminate. Poi a letto: domani si comincia tardi apposta."}
+ ]},
+
+{date:"2026-09-07", wd:"lun", title:"Lama, Palazzo d'Estate e i laghi", base:"Pechino",
+ narr:"La Città Proibita è chiusa il lunedì, e ti va bene così: questa è la giornata che comincia più tardi di tutte.",
+ stops:[
+  {t:"09:30", n:"Tempio dei Lama", ll:[39.9476712,116.4172902], d:"Partenza clemente: è il tuo secondo giorno e il corpo pensa che siano le 3:30 del mattino. Maitreya di 18 metri da un unico tronco di sandalo. Accanto il Tempio di Confucio."},
+  {t:"12:00", n:"Wudaoying Hutong", ll:[39.94843,116.41164], d:"Pranzo a cento metri dal tempio, prima della traversata a nord-ovest."},
+  {t:"13:30", n:"Palazzo d'Estate", ll:[39.9999823,116.2754606], d:"Quaranta minuti di metro. Corridoio Lungo, Collina della Longevità, ritorno in barca sul lago Kunming. Esci verso le 17:30."},
+  {t:"18:30", n:"Houhai", ll:[39.942312,116.385821], d:"Giro del lago al tramonto. Sta' sui vicoli della sponda nord, non sulla bar street."},
+  {t:"19:45", n:"Mr. Shi's Dumplings", ll:[39.943395,116.399777], d:"Cena in Baochao Hutong, a due passi dall'albergo. Chiude alle 21:30. Solo Alipay o WeChat Pay."}
+ ]},
+
+{date:"2026-09-08", wd:"mar", title:"Asse imperiale", base:"Pechino",
+ narr:"Cinque tappe su un asse di tre chilometri, quasi tutto a piedi, e finisce a due passi da dove dormi.",
+ stops:[
+  {t:"08:30", n:"Città Proibita", ll:[39.9168038,116.3971621], d:"Biglietto online 7 giorni prima. Entra da sud all'apertura, percorso a senso unico verso nord. Prenotazione Tian'anmen separata, da fare 1–7 giorni prima."},
+  {t:"12:15", n:"Jingshan Park", ll:[39.9250988,116.3968433], d:"Fuori dall'uscita nord. 15 minuti di salita per la vista simmetrica su quello che hai appena percorso."},
+  {t:"13:45", n:"Beihai Park", ll:[39.9254474,116.3892639], d:"Lago imperiale con la pagoda bianca sull'isola. Traversata in barca per risparmiare gambe."},
+  {t:"16:00", n:"Torre del Tamburo e della Campana", ll:[39.9407055,116.3958979], d:"Estremo nord dell'asse imperiale, e a cinque minuti dall'albergo. Scala ripida, vista su tutti gli hutong."},
+  {t:"18:00", n:"Nanluoguxiang", ll:[39.9334746,116.4133492], d:"Un chilometro a est, a piedi. Cena nei vicoli laterali, non sulla via principale. Rientro presto: domani sveglia alle 5."}
+ ]},
+
+{date:"2026-09-09", wd:"mer", title:"Muraglia a Jinshanling", base:"Pechino",
+ narr:"Muraglia selvaggia invece di Mutianyu. È la giornata più dura e sta al quarto giorno apposta.",
+ stops:[
+  {t:"09:00", n:"Grande Muraglia · Jinshanling", ll:[40.702468,117.233702], d:"2h30 di auto, parti alle 6:00. Il jet lag ormai è passato: è per questo che la Muraglia sta al quarto giorno e non al secondo. 3–4 ore sul crinale, torri ogni cento metri, quasi nessuno. Scarpe da trekking."},
+  {t:"18:00", n:"Bodhi Therapeutic Retreat", ll:[39.9336995,116.4482831], d:"Massaggio su Gongti Beilu, rientrando. Dopo Jinshanling non è un lusso."},
+  {t:"19:45", n:"Taikoo Li Sanlitun", ll:[39.935886,116.455419], d:"Cena all'Edificio 1, poi a letto presto: domani il treno per Xi'an parte tra le 6:38 e le 8:00. Evita Shengyongxing e 1949, sono anatra e l'hai già fatta."}
+ ]},
+
+{date:"2026-09-10", wd:"gio", title:"Treno presto, Terracotta il pomeriggio", base:"Xi'an",
+ tr:{route:"Pechino Ovest → Xi'an Nord", det:"Un G tra le 06:38 e le 08:00 · 4h10–5h"},
+ narr:"All'arrivo lasci i bagagli in deposito (il check-in è alle 14, tu riparti subito) e vai a est.",
+ stops:[
+  {t:"13:30", n:"Esercito di Terracotta", ll:[34.3841153,109.2784918], d:"Il cuore del viaggio, e non c'è un secondo tentativo. Con il primo G sei qui all'una, con quello delle 8 alle due. Fossa 1, poi 3 e 2. Dalle 16 la folla dei pullman si scioglie."},
+  {t:"19:00", n:"Torre della Campana", ll:[34.2594667,108.9470197], d:"Rientro in città, a piedi dall'albergo. Duecento metri a ovest la Torre del Tamburo, il cui arco è l'ingresso del quartiere musulmano."},
+  {t:"19:45", n:"Quartiere musulmano", ll:[34.261498,108.938791], d:"Roujiamo, spiedini di agnello al cumino, noodles biang biang."}
+ ]},
+
+{date:"2026-09-11", wd:"ven", title:"Mattina a Xi'an, pomeriggio a Chengdu", base:"Chengdu",
+ tr:{route:"Xi'an Nord → Chengdu Est", det:"Verso mezzogiorno · 3h attraverso i monti Qinling · arrivo verso le 15"},
+ stops:[
+  {t:"08:30", n:"Grande Moschea di Xi'an", ll:[34.263177,108.9390603], d:"Nascosta in un vicolo dietro il quartiere musulmano. Mille anni e nessun minareto: costruita come un tempio cinese a cortili."},
+  {t:"09:45", n:"Mura di Xi'an", ll:[34.276795,108.947241], d:"Un'ora e mezza in bici sopra le mura. Riconsegna alla Porta Sud, poi linea 2 diretta fino a Xi'an Nord."},
+  {t:"15:30", n:"People's Park", ll:[30.657132,104.057246], d:"Teahouse Heming: tè al gelsomino, carte, i signori con le pinzette che puliscono le orecchie, e l'angolo dei genitori con gli annunci matrimoniali."},
+  {t:"18:00", n:"Vicoli Kuanzhai", ll:[30.6636111,104.0525], d:"Dieci minuti a piedi dal parco. Cortili Qing restaurati. Hotpot dopo."}
+ ]},
+
+{date:"2026-09-12", wd:"sab", title:"Panda, poi Chongqing", base:"Chongqing",
+ tr:{route:"Chengdu Est → Chongqing Est", det:"Dopo pranzo · 1h15 · frequente"},
+ narr:"Dormi vicino a Jiefangbei, e domani parti da Chongqing Est.",
+ stops:[
+  {t:"07:30", n:"Base dei panda giganti", ll:[30.732969,104.14581], d:"All'apertura: è l'unica ora in cui si muovono. Vai verso il fondo della base. Riparti entro le 11."},
+  {t:"15:00", n:"Liziba", ll:[29.55369,106.53804], d:"La metropolitana che entra dentro un palazzo di appartamenti. Dieci minuti di foto e via. Poi Eling Park, appena sopra."},
+  {t:"18:30", n:"Chaotianmen", ll:[29.566623,106.587785], d:"La punta dove Yangtze e Jialing si incontrano, con le due acque di colore diverso. Aspetta le 19:30: prima i grattacieli non sono accesi."},
+  {t:"20:00", n:"Hongyadong", ll:[29.562273,106.579177], d:"Palafitte sulla falesia, undici piani, illuminate d'oro. Guardala anche dal ponte Qiansimen. Cena hotpot: è nato qui. Gratis."}
+ ]},
+
+{date:"2026-09-13", wd:"dom", title:"Tianmen, e la sera a Wulingyuan", base:"Wulingyuan",
+ tr:{route:"Chongqing Est → Zhangjiajie Ovest", det:"~8:00 · solo da Chongqing Est: dalle altre stazioni ci vuole il doppio"},
+ stops:[
+  {t:"12:30", n:"Tianmen Mountain", ll:[29.046809,110.482084], d:"La funivia più lunga del mondo parte dal centro città, poi i 999 gradini fino alla Porta del Cielo e le passerelle di vetro a strapiombo. Sali in funivia e scendi con le scale mobili. Bagagli in deposito in stazione o in un locker: stasera dormi già a Wulingyuan."},
+  {t:"18:30", n:"Wulingyuan", ll:[29.3455,110.5455], d:"Trasferimento alla porta est. Tre notti qui: da domani il parco è a piedi da dove dormi."}
+ ]},
+
+{date:"2026-09-14", wd:"lun", title:"Yuanjiajie e Tianzi", base:"Wulingyuan",
+ narr:"Le piattaforme panoramiche. Il biglietto del parco vale quattro giorni, quindi oggi e domani sono lo stesso biglietto.",
+ stops:[
+  {t:"08:00", n:"Yuanjiajie", d:"I pilastri di Avatar dalle piattaforme alte. Navetta interna dalla porta est. Presto: dopo le 10 arrivano i gruppi."},
+  {t:"11:00", n:"Ascensore Bailong", ll:[29.3458,110.47254], d:"Chi ci è stato consiglia di prenderlo in discesa per evitare le code peggiori."},
+  {t:"14:00", n:"Monte Tianzi", ll:[29.379323,110.463655], d:"I panorami migliori del parco. Sali in funivia e scendi a piedi (un'ora e mezza). Attenzione alle scimmie sul sentiero delle Dieci Miglia."}
+ ]},
+
+{date:"2026-09-15", wd:"mar", title:"Yangjiajie e il fondovalle", base:"Wulingyuan",
+ narr:"Ieri le piattaforme, oggi si cammina. Se ieri c'era nebbia fitta: salta tutto e rifai Yuanjiajie e Tianzi col cielo giusto — quello resta il ripiego, non il piano.",
+ stops:[
+  {t:"07:30", n:"Yangjiajie", ll:[29.367523,110.410561], d:"Settore nord-ovest, 40 minuti di navetta interna. Chi ci arriva lo chiama la parte migliore del parco, e quella senza calca. Sentiero per Tianbo Prefecture e il passaggio di One Step to Heaven. Verifica il percorso delle navette la sera prima: non collegano tutto."},
+  {t:"13:30", n:"Golden Whip Stream", ll:[29.315305,110.434767], d:"Due ore a fondovalle lungo il torrente, guardando i pilastri dal basso invece che dall'alto. Piatto, ombreggiato, zero funivie e zero code: l'unico tratto che si fa solo a piedi. Sbocca vicino al Bailong."},
+  {t:"—", opt:true, n:"Ponte di vetro", ll:[29.398215,110.696215], d:"Fuori dal parco, biglietto separato, 40 minuti a est. Il più lungo e alto al mondo (430 m), con bungee e zipline. Ma c'è chi dopo averlo fatto ha scritto di aver preferito passare quel tempo dentro il parco. Code lunghe per le attività."},
+  {t:"—", opt:true, n:"Lago Baofeng", ll:[29.32775,110.54937], d:"Alternativa lenta, biglietto separato. Lago tra i pinnacoli, in barca, mezza giornata scarsa. La scelta giusta se ieri vi ha distrutto le gambe. Vicinissimo alla porta est."}
+ ]},
+
+{date:"2026-09-16", wd:"mer", title:"Treno per Guilin", base:"Guilin",
+ tr:{route:"Zhangjiajie Ovest → Guilin", det:"D3967 delle 7:17, l'unico diretto della giornata · ~7 ore. Se lo perdi devi passare da Changsha."},
+ stops:[
+  {t:"15:00", n:"Grotte del Flauto di Canna", ll:[25.304409,110.273614], d:"Grotta carsica illuminata a colori, un'ora e mezza. Kitsch ma spettacolare."},
+  {t:"17:30", n:"Collina della Proboscide", ll:[25.266947,110.293263], d:"Il simbolo di Guilin sul fiume Li. La sera le pagode del Sole e della Luna si illuminano: giro dei Due Fiumi e Quattro Laghi dopo cena."}
+ ]},
+
+{date:"2026-09-17", wd:"gio", title:"Fiume Li e Impression Liu Sanjie", base:"Yangshuo",
+ narr:"Crociera sul fiume Li da Guilin, partenza verso le 9:30, quattro ore tra i pinnacoli. Pomeriggio in albergo, cena leggera alle 18, poi lo spettacolo.",
+ stops:[
+  {t:"12:30", n:"Xingping", ll:[24.91654,110.52649], d:"Il tratto di fiume che sta sulla banconota da 20 yuan è proprio qui. Borgo antico, pranzo col pesce alla birra."},
+  {t:"19:30", n:"Impression Liu Sanjie", ll:[24.772064,110.497385], d:"Un'ora sul fiume Li: 600 attori, molti pescatori del posto, dodici picchi carsici illuminati. Prendi posti B o superiori — i C sono sgabelli e da là arrivano tutte le stroncature. Arriva mezz'ora prima. Repellente per zanzare."},
+  {t:"21:00", n:"West Street, Yangshuo", ll:[24.77621,110.479], d:"Dopo lo spettacolo, non prima: alle 21 è quello per cui esiste. Duemila persone escono insieme e i taxi si intasano — cammina, sono venti minuti lungo il fiume. Cena qui."}
+ ]},
+
+{date:"2026-09-18", wd:"ven", title:"Treno per Hong Kong e Sham Shui Po", base:"Hong Kong",
+ tr:{route:"Guilin Ovest → Hong Kong West Kowloon", det:"Corsa delle 12:42 · 3h10. Da Yangshuo alla stazione 1h30 di auto: parti alle 9:30. Transfrontaliero: passaporto."},
+ narr:"Dormi a Tsim Sha Tsui o Jordan.",
+ stops:[
+  {t:"17:00", n:"Sham Shui Po · Apliu Street", ll:[22.330594,114.161482], d:"Quattro fermate di metro da TST. Mercato delle pulci di elettronica — fotocamere vintage, cavi, orologi — più i banchi di tessuti e il cibo economico migliore di Hong Kong nelle vie intorno. È il quartiere meno rifatto della città. Si contratta."},
+  {t:"20:00", n:"Tsim Sha Tsui Promenade", ll:[22.2972721,114.1783517], d:"Lo skyline dell'isola dall'altra sponda. Lo spettacolo di luci parte alle 20 mentre sei lì. Carica l'Octopus card appena arrivi: qui Alipay non serve più."}
+ ]},
+
+{date:"2026-09-19", wd:"sab", title:"Lantau, Tai O e partenza", base:"volo serale",
+ narr:"Lantau è l'isola dell'aeroporto: fai la giornata e poi scendi al terminal senza un solo trasferimento sprecato. Regge con qualsiasi volo dalle 19 in poi.",
+ stops:[
+  {t:"07:45", n:"Australia Dairy Company", ll:[22.304628,114.1705439], d:"Colazione a Jordan prima di partire. Il cha chaan teng più famoso della città: uova strapazzate, French toast, budino di latte al vapore, tè al latte. Coda già alle 7:25. Aperto il sabato — chiude il giovedì, che stavolta non ti tocca."},
+  {t:"10:00", n:"Grande Buddha di Lantau", ll:[22.2539847,113.904984], d:"MTR a Tung Chung con i bagagli in deposito in stazione, poi funivia Ngong Ping 360: 25 minuti sospesi sopra il mare. 268 gradini."},
+  {t:"11:30", n:"Monastero Po Lin", ll:[22.2554932,113.9080796], d:"Ai piedi del Buddha, ingresso libero. Sala dei Diecimila Buddha e giardini. Pranzo vegetariano al refettorio dei monaci."},
+  {t:"13:30", n:"Tai O", ll:[22.2525045,113.861079], d:"Autobus da Ngong Ping, mezz'ora. Villaggio di pescatori su palafitte, pesce essiccato ovunque, ritmo lentissimo. Giro in barca da 50 dollari HK. Ultima tappa del viaggio: da qui l'aeroporto è a mezz'ora scarsa."}
+ ]}
+];
+
+const BASI = [
+ ["Pechino","6 → 10 set","4 notti","Prenotato · zona Gulou/Houhai",true],
+ ["Xi'an","10 → 11 set","1 notte","Vicino alla Torre della Campana: il quartiere musulmano è a piedi",false],
+ ["Chengdu","11 → 12 set","1 notte","Vicino ai vicoli Kuanzhai o al People's Park",false],
+ ["Chongqing","12 → 13 set","1 notte","Jiefangbei. Domani si parte da Chongqing Est",false],
+ ["Wulingyuan","13 → 16 set","3 notti","Porta est del parco, non Zhangjiajie città",false],
+ ["Guilin","16 → 17 set","1 notte","",false],
+ ["Yangshuo","17 → 18 set","1 notte","",false],
+ ["Hong Kong","18 → 19 set","1 notte","Tsim Sha Tsui o Jordan",false]
+];
+
+const TRENI = [
+ ["10 set","Pechino Ovest → Xi'an Nord","Il primo G del mattino, 06:38–08:00 · 4h10–5h. Regge l'Esercito: non c'è un secondo tentativo."],
+ ["11 set","Xi'an Nord → Chengdu Est","Verso mezzogiorno · 3h · frequente"],
+ ["12 set","Chengdu Est → Chongqing Est","Dopo pranzo · 1h15 · frequente"],
+ ["13 set","Chongqing Est → Zhangjiajie Ovest","~8:00 · solo da Chongqing Est"],
+ ["16 set","Zhangjiajie Ovest → Guilin","D3967 delle 7:17 · unico diretto del giorno · ~7h"],
+ ["18 set","Guilin Ovest → HK West Kowloon","12:42 · 3h10 · transfrontaliero, passaporto"]
+];
+
+const DAFARE = [
+ ["Biglietti Pechino → Xi'an del 10","26 ago","In vendita da oggi. Metti la sveglia: la finestra cinese è di circa due settimane.",true],
+ ["D3967 Zhangjiajie → Guilin","1 set · 02:00","Ora italiana. Uno solo al giorno: se salta, si passa da Changsha.",true],
+ ["Treno Guilin → Hong Kong","3 set · 02:00","Ora italiana. Tre corse al giorno, regole proprie per il transfrontaliero.",true],
+ ["Prenotazione Tian'anmen","1–7 giorni prima","Su WeChat, con passaporto. Separata dalla Città Proibita, nessun same-day.",false],
+ ["Città Proibita","7 giorni prima","Biglietto online. Chiusa il lunedì — per questo è il martedì.",false],
+ ["Biglietti parco Wulingyuan","almeno 10 giorni prima","Per il 14 e il 15, porta est. Valgono quattro giorni.",false],
+ ["Impression Liu Sanjie","con anticipo","Posti B o superiori. I C sono sgabelli.",false],
+ ["Esercito di Terracotta","con anticipo","",false],
+ ["Alipay o WeChat Pay","prima di partire","Collega la carta e provala in Italia: molti posti non prendono altro.",false],
+ ["Passaporto","subito","Almeno sei mesi di validità residua all'ingresso. È l'unica cosa con tempi lunghi.",false]
+];
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const view = $("#view"), rail = $("#rail");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let day = 0, tab = "days";
+
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("on");
+  clearTimeout(t._x); t._x = setTimeout(()=>t.classList.remove("on"), 1900);
+}
+function fmtDate(iso){
+  const [y,m,d] = iso.split("-").map(Number);
+  const mesi = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
+  return d + " " + mesi[m-1];
+}
+function amap(ll,n){ return "https://uri.amap.com/marker?position=" + ll[1] + "," + ll[0] + "&name=" + encodeURIComponent(n); }
+function gmap(ll){ return "https://www.google.com/maps/search/?api=1&query=" + ll[0] + "," + ll[1]; }
+
+/* ---------- render ---------- */
+function renderRail(){
+  rail.innerHTML = DAYS.map((d,i) => `
+    <button class="chip${d.tr?" transfer":""}" role="tab" aria-selected="${i===day&&tab==="days"}" data-i="${i}">
+      <span class="wd">${d.wd}</span><span class="dn">${Number(d.date.slice(8))}</span>
+    </button>`).join("");
+  const act = rail.querySelector('[aria-selected="true"]');
+  if(act) act.scrollIntoView({block:"nearest", inline:"center", behavior:"smooth"});
+}
+
+function renderDay(){
+  const d = DAYS[day];
+  const stops = d.stops.map(s => `
+    <li class="stop${s.opt?" opt":""}">
+      <div class="time">${esc(s.t)}</div>
+      <div class="thread"><div class="card">
+        <h2>${esc(s.n)}${s.opt?'<span class="tag">opzione</span>':""}</h2>
+        <p>${esc(s.d)}</p>
+        ${s.ll ? `<div class="acts">
+          <a class="act" href="${amap(s.ll, s.n)}" target="_blank" rel="noopener">Amap</a>
+          <a class="act" href="${gmap(s.ll)}" target="_blank" rel="noopener">Google</a>
+          <button class="act" data-copy="${s.ll[0]}, ${s.ll[1]}">Copia coord.</button>
+        </div>` : ""}
+      </div></div>
+    </li>`).join("");
+
+  view.innerHTML = `
+    <div class="dayhead">
+      <div class="seal">${CN[day]}</div>
+      <div>
+        <div class="eyebrow">Giorno ${day+1} di 14 · ${d.wd} ${fmtDate(d.date)} · <span class="base">${esc(d.base)}</span></div>
+        <h1>${esc(d.title)}</h1>
+      </div>
+    </div>
+    ${d.tr ? `<div class="transfer">
+      <span class="lbl">Treno</span>
+      <span class="route">${esc(d.tr.route)}</span>
+      <span class="det">${esc(d.tr.det)}</span>
+    </div>` : ""}
+    ${d.narr ? `<p class="narr">${esc(d.narr)}</p>` : ""}
+    <ul class="stops">${stops}</ul>
+    <div class="pager">
+      <button id="pPrev" ${day===0?"disabled":""}><span class="k">Prima</span>${day>0?esc(DAYS[day-1].title):"—"}</button>
+      <button class="next" id="pNext" ${day===DAYS.length-1?"disabled":""}><span class="k">Poi</span>${day<DAYS.length-1?esc(DAYS[day+1].title):"—"}</button>
+    </div>`;
+
+  const pp = $("#pPrev"), pn = $("#pNext");
+  if(pp) pp.onclick = () => go(day-1);
+  if(pn) pn.onclick = () => go(day+1);
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+function renderLog(){
+  const basi = BASI.map(b => `
+    <div class="row${b[4]?" done":""}">
+      <span class="k">${esc(b[0])}</span><span class="v">${esc(b[1])} · ${esc(b[2])}</span>
+      ${b[3]?`<span class="d">${esc(b[3])}</span>`:""}
+    </div>`).join("");
+  const treni = TRENI.map(t => `
+    <div class="row">
+      <span class="k">${esc(t[1])}</span><span class="v">${esc(t[0])}</span>
+      <span class="d">${esc(t[2])}</span>
+    </div>`).join("");
+  const df = DAFARE.map(x => `
+    <div class="row${x[3]?" hot":""}">
+      <span class="k">${esc(x[0])}</span><span class="v">${esc(x[1])}</span>
+      ${x[2]?`<span class="d">${esc(x[2])}</span>`:""}
+    </div>`).join("");
+
+  view.innerHTML = `
+    <div class="dayhead">
+      <div class="seal sm">印</div>
+      <div><div class="eyebrow">6 → 19 settembre 2026 · 3 persone</div>
+      <h1>Logistica</h1></div>
+    </div>
+    <h3 class="sec">Da prenotare</h3><div class="rows">${df}</div>
+    <p class="note">Niente visto: fino al 31 dicembre 2026 i cittadini italiani con passaporto ordinario entrano in Cina continentale senza visto per soggiorni fino a 30 giorni. Tieni a portata la prova dell'uscita entro i 30 giorni — il treno per Hong Kong la copre.</p>
+    <h3 class="sec">Otto basi, otto prenotazioni</h3><div class="rows">${basi}</div>
+    <h3 class="sec">Sei treni</h3><div class="rows">${treni}</div>
+    <h3 class="sec">Voli</h3><div class="rows">
+      <div class="row"><span class="k">Ginevra → Pechino</span><span class="v">5 set</span><span class="d">Atterraggio il 6 nel primo pomeriggio.</span></div>
+      <div class="row"><span class="k">Hong Kong → Ginevra</span><span class="v">19 set</span><span class="d">Dalle 19 in poi. Il programma di Lantau regge solo con questo orario.</span></div>
+    </div>
+    <p class="note">I link Amap funzionano in Cina continentale, quelli Google a Hong Kong (o con VPN). In Cina i due sistemi usano griglie di coordinate diverse: aspettati uno scarto di qualche centinaio di metri e fidati del nome del posto più che del puntino.</p>`;
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+function render(){
+  if(tab === "days") renderDay(); else renderLog();
+  renderRail();
+  $("#tabDays").setAttribute("aria-current", tab==="days" ? "page" : "false");
+  $("#tabLog").setAttribute("aria-current", tab==="log" ? "page" : "false");
+  $("#prev").disabled = (tab!=="days" || day===0);
+  $("#next").disabled = (tab!=="days" || day===DAYS.length-1);
+}
+function go(i){
+  if(i<0 || i>=DAYS.length) return;
+  day = i; tab = "days"; render();
+}
+
+/* ---------- countdown ---------- */
+(function(){
+  const start = new Date("2026-09-06T00:00:00");
+  const now = new Date();
+  const diff = Math.ceil((start - now) / 86400000);
+  const el = $("#countdown");
+  if(diff > 0) el.innerHTML = "fra <span>" + diff + "</span> giorni";
+  else if(diff > -14) el.innerHTML = "giorno <span>" + (1 - diff) + "</span>";
+  else el.textContent = "archivio";
+  const idx = Math.floor((now - start) / 86400000);
+  if(idx >= 0 && idx < DAYS.length) day = idx;
+})();
+
+/* ---------- events ---------- */
+rail.addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if(b) go(+b.dataset.i);
+});
+view.addEventListener("click", e => {
+  const b = e.target.closest("[data-copy]"); if(!b) return;
+  const txt = b.dataset.copy;
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(txt).then(()=>toast("Copiato · " + txt), ()=>toast(txt));
+  } else toast(txt);
+});
+$("#prev").onclick = () => go(day-1);
+$("#next").onclick = () => go(day+1);
+$("#tabDays").onclick = () => { tab = "days"; render(); };
+$("#tabLog").onclick = () => { tab = "log"; render(); };
+document.addEventListener("keydown", e => {
+  if(e.key === "ArrowLeft") go(day-1);
+  if(e.key === "ArrowRight") go(day+1);
+});
+let sx = 0, sy = 0;
+document.addEventListener("touchstart", e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, {passive:true});
+document.addEventListener("touchend", e => {
+  if(tab !== "days") return;
+  const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+  if(Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 2) go(day + (dx < 0 ? 1 : -1));
+}, {passive:true});
+
+render();
+
+if("serviceWorker" in navigator && location.protocol.startsWith("http")){
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+</script>
+</body>
+</html>
