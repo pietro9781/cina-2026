@@ -234,6 +234,45 @@ h3.sec:first-of-type{margin-top:6px}
 .dl .bar{height:2px;background:var(--line-soft);border-radius:2px;margin-top:6px;overflow:hidden}
 .dl .bar i{display:block;height:100%;width:0;background:var(--jade);transition:width .2s linear}
 
+/* ---------- guida dentro un sito ---------- */
+/* La mappa resta in vista mentre si legge: camminando serve sempre, e i punti
+   sono a 60 m l'uno dall'altro — a vederli tutti insieme si accavallano, quindi
+   e' la mappa a seguire la lettura invece del contrario. */
+.gmap{position:sticky;top:var(--headh,120px);z-index:6;background:var(--celadon);padding:6px 0 10px}
+.gmap .map{height:230px}
+.gpunto.on h2{color:var(--cinnabar)}
+.gpunto.on .gnum{box-shadow:0 0 0 4px rgba(188,59,46,.2)}
+.act.guida{border-color:var(--cinnabar);color:var(--cinnabar)}
+.gintro{font-size:15px;color:var(--ink-2);margin:0 0 18px;line-height:1.55}
+.gpunto{display:grid;grid-template-columns:26px 1fr;column-gap:12px;margin:0 0 22px}
+.gnum{
+  width:26px;height:26px;border-radius:50%;background:var(--cinnabar);color:#fff;
+  display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:500;
+  margin-top:2px;
+}
+.gpunto h2{
+  font-family:var(--display);font-size:18px;font-weight:600;margin:0 0 2px;line-height:1.2;
+}
+.gpunto .zh{
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--mute);
+  display:block;margin-bottom:6px;
+}
+.gpunto p{margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.52}
+.gpunto .acts{margin-top:8px}
+.gcoda{
+  border-left:3px solid var(--gold);background:var(--paper);border:1px solid var(--line);
+  border-left:3px solid var(--gold);border-radius:3px;padding:11px 13px;
+  font-size:13.5px;color:var(--ink-2);line-height:1.5;margin:4px 0 0;
+}
+.gback{
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  background:none;border:0;color:var(--jade);cursor:pointer;padding:0;margin:0 0 12px;
+}
+.avviso{
+  font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--mute);
+  line-height:1.5;margin:18px 2px 0;
+}
+
 .mapwrap{margin:0 0 18px}
 .maplab{
   font-family:var(--mono);font-size:10px;letter-spacing:.16em;
@@ -520,6 +559,7 @@ import {
   toGCJ, toWGS, haversine, splitFrames, frameLabels, boundsOf, fmtDistance,
   walkMinutes, currentStopIndex, fitZoom, viewportTiles
 } from "./geo.js";
+import { GUIDE } from "./guida.js";
 
 /* ---------- helpers ---------- */
 const $ = s => document.querySelector(s);
@@ -727,6 +767,7 @@ function stopItem(s, n, dopo, adesso){
         <h2>${esc(s.n)}${s.opt?'<span class="tag">opzione</span>':""}${adesso?'<span class="nowtag">adesso</span>':""}</h2>
         <p>${esc(s.d)}</p>
         ${s.ll ? `<div class="acts">
+          ${GUIDE[s.n] ? `<button class="act guida" data-guida="${esc(s.n)}">Guida · ${GUIDE[s.n].punti.length} tappe</button>` : ""}
           <a class="act" href="${amap(s.ll, s.n)}" target="_blank" rel="noopener">Amap</a>
           <a class="act" href="${gmap(s.ll)}" target="_blank" rel="noopener">Google</a>
           <button class="act" data-copy="${coordText(s.ll)}">Copia coord.</button>
@@ -971,6 +1012,98 @@ function renderOverview(){
   window.scrollTo({top:0, behavior:"instant"});
 }
 
+let guidaAperta = null;
+
+function renderGuida(){
+  const sito = guidaAperta;
+  const g = GUIDE[sito];
+  if(!g){ tab = "days"; renderDay(); return; }
+
+  const punti = g.punti.map((p, i) => `
+    <div class="gpunto" data-gp="${i}">
+      <div class="gnum">${i+1}</div>
+      <div>
+        <h2>${esc(p.n)}</h2>
+        <span class="zh">${esc(p.zh || "")}</span>
+        <p>${esc(p.d)}</p>
+        <div class="acts">
+          <a class="act" href="${amap(p.ll, p.n)}" target="_blank" rel="noopener">Amap</a>
+          <button class="act" data-copy="${coordText(p.ll)}">Copia coord.</button>
+        </div>
+      </div>
+    </div>`).join("");
+
+  view.innerHTML = `
+    <button class="gback" id="gBack">‹ torna al giorno</button>
+    <div class="dayhead">
+      <div class="seal sm">导</div>
+      <div><div class="eyebrow">Guida · ${g.punti.length} punti · ${esc(g.durata || "")}</div>
+      <h1>${esc(sito)}</h1></div>
+    </div>
+    <p class="gintro">${esc(g.intro)}</p>
+    <div class="gmap">
+      <div class="maplab">
+        <span>Il percorso dentro</span>
+        <span class="span" id="gWhere">tocca un punto per vederlo</span>
+      </div>
+      <div class="map" id="mapGuida"></div>
+      <div class="mapfoot">
+        <span id="mapnoteGuida"></span>
+        <button id="gAll" style="font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--paper);border:1px solid var(--line);color:var(--jade);border-radius:2px;padding:3px 7px;cursor:pointer">Tutti</button>
+      </div>
+    </div>
+    ${punti}
+    ${g.coda ? `<p class="gcoda">${esc(g.coda)}</p>` : ""}
+    <p class="avviso">Le posizioni sui punti vengono da OpenStreetMap e sono verificate. I testi no: sono scritti a memoria, e su una data o un numero preciso possono sbagliare. Dove una cosa è leggenda e non storia, sta scritto.</p>`;
+
+  const note = $("#mapnoteGuida");
+  const drawn = drawMap($("#mapGuida"), g.punti.map((p, i) => ({
+    ll: p.ll, label: String(i+1), title: p.n,
+    onSelect: () => fuoco(i, true)
+  })), {
+    maxZoom: 16, zoomControl: false,
+    onOffline: () => { if(note){ note.textContent = "senza rete · solo posizioni"; note.className = "off"; } }
+  });
+
+  const tuttiBounds = boundsOf(g.punti.map(p => toGCJ(p.ll)));
+
+  /** Porta la mappa su un punto e lo accende, da qualunque lato si parta. */
+  function fuoco(i, scorri){
+    const p = g.punti[i];
+    drawn.map.setView(toGCJ(p.ll), 17, { animate: true });
+    document.querySelectorAll(".gpunto.on").forEach(el => el.classList.remove("on"));
+    document.querySelectorAll(".pin--on").forEach(el => el.classList.remove("pin--on"));
+    const sez = document.querySelector(`[data-gp="${i}"]`);
+    if(sez) sez.classList.add("on");
+    const pin = drawn.markers[i].getElement();
+    if(pin && pin.firstChild) pin.firstChild.classList.add("pin--on");
+    const dove = $("#gWhere");
+    if(dove) dove.textContent = `${i+1}. ${p.n}`;
+    if(scorri && sez) sez.scrollIntoView({ block: "center", behavior: "smooth" });
+  }
+
+  view.querySelectorAll("[data-gp]").forEach(el => {
+    el.addEventListener("click", ev => {
+      if(ev.target.closest(".acts")) return;
+      fuoco(+el.dataset.gp, false);
+    });
+  });
+
+  $("#gAll").onclick = () => {
+    drawn.map.fitBounds(tuttiBounds, { padding: [12,12], maxZoom: 16 });
+    document.querySelectorAll(".gpunto.on").forEach(el => el.classList.remove("on"));
+    document.querySelectorAll(".pin--on").forEach(el => el.classList.remove("pin--on"));
+    const dove = $("#gWhere");
+    if(dove) dove.textContent = "tocca un punto per vederlo";
+  };
+
+  $("#gBack").onclick = () => { tab = "days"; render(); };
+  window.scrollTo({top:0, behavior:"instant"});
+  // La testata e' alta quanto e' alta: la mappa ci si appoggia sotto.
+  const h = document.querySelector("header");
+  if(h) document.documentElement.style.setProperty("--headh", h.offsetHeight + "px");
+}
+
 function renderLog(){
   const basi = BASI.map(b => `
     <div class="row${b[4]?" done":""}">
@@ -1022,10 +1155,11 @@ function render(){
   killMaps();
   frameMarkers.clear();
   if(tab === "days") renderDay();
+  else if(tab === "guida") renderGuida();
   else if(tab === "map") renderOverview();
   else renderLog();
   renderRail();
-  $("#tabDays").setAttribute("aria-current", tab==="days" ? "page" : "false");
+  $("#tabDays").setAttribute("aria-current", (tab==="days"||tab==="guida") ? "page" : "false");
   $("#tabMap").setAttribute("aria-current", tab==="map" ? "page" : "false");
   $("#tabLog").setAttribute("aria-current", tab==="log" ? "page" : "false");
   $("#prev").disabled = (tab!=="days" || day===0);
@@ -1080,6 +1214,8 @@ view.addEventListener("click", e => {
     });
     return;
   }
+  const gb = e.target.closest("[data-guida]");
+  if(gb){ guidaAperta = gb.dataset.guida; tab = "guida"; render(); return; }
   const row = e.target.closest("[data-base]");
   if(row){
     const nome = BASI[+row.dataset.base][0];

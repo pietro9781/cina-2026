@@ -1,11 +1,12 @@
 /* Cina 2026 — cache-first, tutto precaricato all'installazione.
    Cambia CACHE quando aggiorni l'itinerario, così il telefono riscarica. */
-const CACHE = "cina-2026-v5";
+const CACHE = "cina-2026-v6";
 const TILES = "cina-2026-tiles-v1";
 const ASSETS = [
   "./",
   "./index.html",
   "./geo.js",
+  "./guida.js",
   "./leaflet.js",
   "./leaflet.css",
   "./manifest.webmanifest",
