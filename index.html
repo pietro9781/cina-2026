@@ -24,6 +24,7 @@
   --cinnabar:#BC3B2E;
   --jade:#3F7264;
   --gold:#9C7B33;
+  --me:#2E6F9E;
   --display:ui-serif,"New York",Georgia,"Times New Roman",serif;
   --body:-apple-system,system-ui,"SF Pro Text","Segoe UI",Roboto,sans-serif;
   --mono:ui-monospace,"SF Mono",Menlo,"Roboto Mono",monospace;
@@ -349,6 +350,20 @@ body.conbarra main{padding-bottom:calc(var(--bar) + 42px)}
 }
 .mapfoot .off{color:var(--gold)}
 
+/* dove sono io */
+.iodot{
+  width:16px;height:16px;border-radius:50%;background:var(--me);
+  box-shadow:0 0 0 3px #fff,0 0 0 4px rgba(46,111,158,.5),0 1px 4px rgba(20,32,29,.5);
+}
+.mapfoot .io{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  background:var(--paper);border:1px solid var(--line);color:var(--me);
+  border-radius:2px;padding:3px 7px;cursor:pointer;flex:0 0 auto;
+}
+.mapfoot .io.acceso{background:var(--me);border-color:var(--me);color:#fff}
+.mapfoot{gap:6px}
+.mapfoot .dist{color:var(--me);text-transform:none;letter-spacing:.04em}
+
 /* segnaposto */
 .pin{
   display:grid;place-items:center;
@@ -608,7 +623,7 @@ const DAFARE = [
 
 import {
   toGCJ, toWGS, haversine, splitFrames, frameLabels, boundsOf, fmtDistance,
-  walkMinutes, currentStopIndex, fitZoom, viewportTiles
+  walkMinutes, currentStopIndex, fitZoom, viewportTiles, wgs2gcj
 } from "./geo.js";
 import { GUIDE } from "./guida.js";
 
@@ -644,7 +659,10 @@ let mapLang = localStorage.getItem(LANG_KEY) || "en";
 let liveMaps = [];
 
 function killMaps(){
-  liveMaps.forEach(m => { try { m.remove(); } catch(e){} });
+  liveMaps.forEach(m => {
+    posDisegni.delete(m);   // altrimenti resta un riferimento a una mappa morta
+    try { m.remove(); } catch(e){}
+  });
   liveMaps = [];
 }
 
@@ -712,6 +730,130 @@ function drawMap(el, points, opts){
   L.control.scale({ metric: true, imperial: false, position: "bottomleft" }).addTo(map);
   return { map, markers };
 }
+
+/* ---------- dove sono io ----------
+   Il GPS restituisce WGS-84 secondo le specifiche, ma i riquadri Amap sono in
+   GCJ-02: mettere la posizione grezza sulla mappa la sposta di mezzo chilometro,
+   in modo per giunta credibile. Quindi si converte.
+
+   Con un'avvertenza onesta: alcuni telefoni in Cina restituiscono già la
+   coordinata spostata, e da qui non c'è modo di sapere quale sia il tuo. Se il
+   puntino ti sembra fuori posto, tienilo premuto e si passa all'altra lettura.
+   La scelta resta memorizzata.
+
+   La posizione non esce mai dal telefono: nessuna richiesta di rete la contiene. */
+const POS_KEY = "cina2026.posdatum";
+let posConverti = localStorage.getItem(POS_KEY) !== "no";
+let posWatch = null, posUltima = null, posErrore = null;
+const posDisegni = new Map();
+
+function posGCJ(){
+  if(!posUltima) return null;
+  const { latitude: la, longitude: lo } = posUltima.coords;
+  return posConverti ? wgs2gcj(la, lo) : [la, lo];
+}
+
+/** Ridisegna il puntino su tutte le mappe vive. */
+function posAggiorna(){
+  const ll = posGCJ();
+  liveMaps.forEach(m => {
+    let d = posDisegni.get(m);
+    if(!ll){ if(d){ d.marker.remove(); d.cerchio.remove(); posDisegni.delete(m); } return; }
+    if(!d){
+      d = {
+        marker: L.marker(ll, { icon: L.divIcon({ className:"", html:'<div class="iodot"></div>',
+                 iconSize:[16,16], iconAnchor:[8,8] }), zIndexOffset: 1000 }).addTo(m),
+        cerchio: L.circle(ll, { radius: 0, color:"#2E6F9E", weight:1, opacity:.5,
+                 fillColor:"#2E6F9E", fillOpacity:.12 }).addTo(m)
+      };
+      posDisegni.set(m, d);
+    }
+    d.marker.setLatLng(ll);
+    d.cerchio.setLatLng(ll).setRadius(Math.min(posUltima.coords.accuracy || 30, 500));
+  });
+  posEtichette();
+}
+
+/** Scrive quanto manca alla tappa più vicina, su ogni mappa. */
+function posEtichette(){
+  const ll = posGCJ();
+  document.querySelectorAll("[data-dist]").forEach(el => {
+    if(!ll){ el.textContent = ""; return; }
+    const punti = JSON.parse(el.dataset.dist || "[]");
+    if(!punti.length){ el.textContent = ""; return; }
+    let best = null;
+    punti.forEach(p => {
+      const d = haversine(ll, toGCJ(p.ll));
+      if(!best || d < best.d) best = { d, n: p.n };
+    });
+    const min = walkMinutes(best.d);
+    el.textContent = `sei a ${fmtDistance(best.d)}${min !== null ? " · " + min + " min" : ""} da ${best.n}`;
+  });
+}
+
+function posBottoni(acceso){
+  document.querySelectorAll("[data-io]").forEach(b => {
+    b.classList.toggle("acceso", acceso);
+    b.textContent = acceso ? "Sei qui" : "Dove sono";
+  });
+}
+
+function posAvvia(){
+  if(!navigator.geolocation){ toast("Questo telefono non dà la posizione"); return; }
+  posBottoni(true);
+  posWatch = navigator.geolocation.watchPosition(
+    p => { posUltima = p; posErrore = null; posAggiorna(); },
+    e => {
+      posErrore = e;
+      posFerma();
+      toast(e.code === 1 ? "Permesso negato: attivalo nelle impostazioni"
+          : e.code === 3 ? "Il GPS non trova il segnale" : "Posizione non disponibile");
+    },
+    { enableHighAccuracy: true, maximumAge: 10000, timeout: 20000 }
+  );
+}
+
+function posFerma(){
+  if(posWatch !== null){ navigator.geolocation.clearWatch(posWatch); posWatch = null; }
+  posUltima = null;
+  posBottoni(false);
+  posAggiorna();
+}
+
+/** Il pulsante su ogni mappa: tocca per accendere, tieni premuto per correggere. */
+function posCollega(){
+  document.querySelectorAll("[data-io]").forEach(b => {
+    if(b._pos) return;
+    b._pos = true;
+    let lungo = null;
+    const inizio = () => { lungo = setTimeout(() => {
+      lungo = "fatto";
+      posConverti = !posConverti;
+      localStorage.setItem(POS_KEY, posConverti ? "si" : "no");
+      toast(posConverti ? "Posizione convertita per le mappe cinesi" : "Posizione usata così com'è");
+      posAggiorna();
+    }, 600); };
+    const fine = () => { if(lungo && lungo !== "fatto") clearTimeout(lungo); };
+    b.addEventListener("pointerdown", inizio);
+    b.addEventListener("pointerup", () => { fine(); });
+    b.addEventListener("pointerleave", fine);
+    b.addEventListener("click", e => {
+      if(lungo === "fatto"){ lungo = null; return; }  // era una pressione lunga
+      posWatch === null ? posAvvia() : posFerma();
+    });
+  });
+  posBottoni(posWatch !== null);
+  posAggiorna();
+}
+
+// Con lo schermo spento il GPS consuma e basta.
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState !== "visible" && posWatch !== null){
+    navigator.geolocation.clearWatch(posWatch); posWatch = null;
+  } else if(document.visibilityState === "visible" && posWatch === null && posUltima){
+    posAvvia();
+  }
+});
 
 /* ---------- scaricare tutte le mappe in anticipo ---------- */
 
@@ -860,6 +1002,8 @@ function renderDay(){
         <div class="map" id="map${i}"></div>
         <div class="mapfoot">
           <span id="mapnote${i}"></span>
+          <span class="dist" data-dist="${esc(JSON.stringify(withLL.map(x => ({n:x.s.n, ll:x.s.ll}))))}"></span>
+          <button class="io" data-io>Dove sono</button>
           <button data-lang>${mapLang === "zh" ? "中文" : "English"}</button>
         </div>
       </div>` : "";
@@ -1026,6 +1170,7 @@ function renderOverview(){
       <div class="map tall" id="mapAll"></div>
       <div class="mapfoot">
         <span id="mapnoteAll"></span>
+        <button class="io" data-io>Dove sono</button>
         <button data-lang>${mapLang === "zh" ? "中文" : "English"}</button>
       </div>
     </div>
@@ -1105,7 +1250,8 @@ function renderGuida(){
       </div>
       <div class="map" id="mapGuida"></div>
       <div class="mapfoot">
-        <span id="mapnoteGuida"></span>
+        <span class="dist" data-dist="${esc(JSON.stringify(g.punti.map(p => ({n:p.n, ll:p.ll}))))}"></span>
+        <button class="io" data-io>Dove sono</button>
         <button id="gAll" style="font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--paper);border:1px solid var(--line);color:var(--jade);border-radius:2px;padding:3px 7px;cursor:pointer">Tutti</button>
       </div>
     </div>
@@ -1261,6 +1407,7 @@ function render(){
   else if(tab === "map") renderOverview();
   else renderLog();
   renderRail();
+  posCollega();
   $("#tabDays").setAttribute("aria-current", (tab==="days"||tab==="guida") ? "page" : "false");
   $("#tabMap").setAttribute("aria-current", tab==="map" ? "page" : "false");
   $("#tabLog").setAttribute("aria-current", tab==="log" ? "page" : "false");

@@ -24,6 +24,24 @@ già guardati.
 Senza rete e senza riquadri in memoria restano comunque il tracciato, i numeri
 delle tappe e la barra di scala: la mappa non diventa mai un rettangolo vuoto.
 
+## Dove sono io
+
+Il tasto **«Dove sono»** sotto ogni mappa accende un puntino blu con il cerchio
+di precisione, e scrive quanto manca alla tappa più vicina. Il GPS funziona
+anche senza rete — i satelliti non passano da internet — quindi il puntino si
+vede pure con il telefono in modalità aereo, purché i riquadri di mappa siano
+già stati scaricati. La posizione **non esce mai dal telefono**: nessuna
+richiesta di rete la contiene.
+
+**Attenzione al sistema di coordinate, di nuovo.** Il GPS restituisce WGS-84
+per specifica, i riquadri Amap sono in GCJ-02: senza conversione il puntino
+finisce mezzo chilometro più in là. L'app converte, ed è la scelta giusta per
+un browser che rispetta le specifiche. Ma **alcuni telefoni in Cina
+restituiscono già la coordinata spostata**, e non c'è modo di sapere in anticipo
+quale sia il tuo. Se il puntino ti sembra fuori posto, **tieni premuto il tasto
+«Dove sono»**: si passa all'altra lettura e la scelta resta memorizzata.
+Misurato: fra le due letture ballano 555 metri.
+
 ## Le altre due cose che l'app sa fare
 
 **Quanto c'è fino alla tappa dopo.** Sotto ogni scheda: «650 m · 11 min a
