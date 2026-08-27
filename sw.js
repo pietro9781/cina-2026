@@ -1,5 +1,9 @@
 /* Cina 2026 — cache-first, tutto precaricato all'installazione.
-   Cambia CACHE quando aggiorni l'itinerario, così il telefono riscarica. */
+
+   NON serve più cambiare CACHE per aggiornare l'itinerario: ogni volta che
+   l'app parte, il service worker riscarica il codice, lo confronta con quello
+   che ha appena servito e se è cambiato lo dice alla pagina, che si aggiorna
+   da sé. CACHE si alza solo per svuotare tutto e ricominciare. */
 const CACHE = "cina-2026-v6";
 const TILES = "cina-2026-tiles-v1";
 const ASSETS = [
@@ -29,14 +33,25 @@ self.addEventListener("install", e => {
 });
 
 self.addEventListener("activate", e => {
-  e.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(
-        keys.filter(k => k !== CACHE && k !== TILES).map(k => caches.delete(k))
-      ))
-      .then(() => self.clients.claim())
-  );
+  e.waitUntil((async () => {
+    const keys = await caches.keys();
+    const vecchie = keys.filter(k => k !== CACHE && k !== TILES);
+    await Promise.all(vecchie.map(k => caches.delete(k)));
+    await self.clients.claim();
+    // Se c'erano cache vecchie da buttare, questo è un aggiornamento vero e
+    // non la prima installazione: vale la pena dirlo alla pagina.
+    if (vecchie.length) await avvisa();
+  })());
 });
+
+/* Il codice dell'app: quello che ha senso confrontare fra una versione e
+   l'altra. Le immagini e i riquadri di mappa non cambiano mai. */
+const MUTEVOLI = /(\/|\/index\.html|\/geo\.js|\/guida\.js)$/;
+
+async function avvisa() {
+  const clienti = await self.clients.matchAll({ includeUncontrolled: true, type: "window" });
+  clienti.forEach(c => c.postMessage({ tipo: "aggiornata" }));
+}
 
 /* I tile non scadono mai da soli: una volta visti restano, ed è tutto il punto.
    Si tiene solo il tetto, buttando via i più vecchi inseriti. */
@@ -77,24 +92,54 @@ self.addEventListener("fetch", e => {
 
   if (new URL(req.url).origin !== location.origin) return; // Amap e Google passano diretti
 
-  e.respondWith(
-    caches.match(req, { ignoreSearch: true }).then(hit => {
-      if (hit) {
-        // rinfresca in background quando c'è rete, ma serve subito la copia locale
-        fetch(req).then(res => {
-          if (res && res.ok) caches.open(CACHE).then(c => c.put(req, res.clone()));
-        }).catch(() => {});
-        return hit;
-      }
-      return fetch(req)
-        .then(res => {
-          if (res && res.ok) {
-            const copy = res.clone();
-            caches.open(CACHE).then(c => c.put(req, copy));
-          }
-          return res;
-        })
-        .catch(() => caches.match("./index.html"));
-    })
-  );
+  // Le due promesse vanno create QUI, sincrone: waitUntil e respondWith
+  // valgono solo finché l'evento è vivo, e dopo un await non lo è più.
+  // (Ci ho sbattuto la testa: il rinfresco non partiva e la cache restava
+  // ferma alla versione vecchia senza un solo errore visibile.)
+  const rinfresco = MUTEVOLI.test(new URL(req.url).pathname) ? aggiorna(req) : null;
+  if (rinfresco) e.waitUntil(rinfresco);
+  e.respondWith(rispondi(req, rinfresco));
 });
+
+/**
+ * Riscarica un file, lo confronta con quello in cache e se è cambiato lo
+ * sostituisce e avvisa la pagina. È questo che fa aggiornare l'app da sola.
+ */
+async function aggiorna(req) {
+  try {
+    const c = await caches.open(CACHE);
+    const prima = await c.match(req, { ignoreSearch: true });
+    // cache:"reload" scavalca la cache HTTP del browser: GitHub Pages manda
+    // max-age=600, e senza questo si confronterebbe con una copia vecchia
+    // di dieci minuti, cioè non ci si accorgerebbe dell'aggiornamento.
+    const res = await fetch(req.url, { cache: "reload", credentials: "same-origin" });
+    if (!res || !res.ok) return null;
+    if (prima) {
+      const [vecchio, nuovo] = await Promise.all([prima.clone().text(), res.clone().text()]);
+      if (vecchio === nuovo) return res;
+      await c.put(req, res.clone());
+      await avvisa();
+      return res;
+    }
+    await c.put(req, res.clone());
+    return res;
+  } catch (err) {
+    return null; // niente rete: si tiene quello che c'è, ed è tutto il punto
+  }
+}
+
+/** Serve subito la copia locale; solo se non c'è aspetta la rete. */
+async function rispondi(req, rinfresco) {
+  const c = await caches.open(CACHE);
+  const hit = await c.match(req, { ignoreSearch: true });
+  if (hit) return hit;
+  try {
+    const res = await (rinfresco || fetch(req));
+    if (res && res.ok) {
+      await c.put(req, res.clone());
+      return res;
+    }
+    if (res) return res;
+  } catch (err) { /* si cade sotto */ }
+  return (await c.match("./index.html")) || Response.error();
+}

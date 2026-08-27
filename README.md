@@ -89,15 +89,35 @@ dove due tappe consecutive distano più di 60 km.
 
 ## Modifiche
 
-Dopo aver cambiato l'itinerario, **alzare il numero di `CACHE` in `sw.js`**
-(`cina-2026-v5` → `v6`), altrimenti il telefono continua a mostrare la versione
-vecchia.
+Basta cambiare il file e pubblicare: **non c'è nessun numero di versione da
+alzare.** A ogni avvio il service worker riscarica `index.html`, `geo.js` e
+`guida.js`, li confronta con quelli che ha appena servito e, se sono cambiati,
+li sostituisce e avvisa la pagina. Se l'app è appena stata aperta e non è stata
+ancora toccata si ricarica da sola; se ci si sta leggendo dentro compare
+«Nuova versione · tocca per aggiornare» e si aggiorna quando vuoi tu.
+Chi lascia l'app aperta in Home la fa ricontrollare rientrando in primo piano,
+non più di una volta ogni mezz'ora.
+
+Leaflet e le icone non si ricontrollano: non cambiano mai e riscaricare 144 KB
+a ogni avvio sarebbe uno spreco. Se un giorno cambiano, si aggiorna la lista
+`ASSETS` in `sw.js` — che cambia il file del service worker e fa ripartire il
+precaricamento da capo.
+
+`CACHE` serve ancora solo a una cosa: alzarlo butta via tutto e ricomincia da
+zero. Non serve per le modifiche normali.
+
+**Il tranello che è costato tempo:** in `sw.js` le promesse di `waitUntil` e
+`respondWith` vanno create **sincrone** dentro il gestore dell'evento. Se si
+chiama `e.waitUntil()` dopo un `await`, l'evento non è più vivo e la chiamata
+fallisce in silenzio: il rinfresco non parte, la cache resta ferma alla versione
+vecchia e non c'è nessun errore da nessuna parte.
 
 ## Verifiche
 
 ```bash
 node --test test/geo.test.mjs     # 43 controlli: conversioni, riquadri, distanze a piedi, orologio
 node tools/frames-check.mjs       # come si dividono i 14 giorni, e le tappe senza coordinate
+node tools/update-check.mjs       # che l'app si aggiorni da sola (usa /tmp/index.{A,B,C}.html)
 ```
 
 Gli script in `tools/` che usano Playwright cercano il browser nel

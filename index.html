@@ -365,6 +365,10 @@ h3.sec:first-of-type{margin-top:6px}
   transition:opacity .2s ease,transform .2s ease;z-index:40;max-width:88vw;text-align:center;
 }
 #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.tap{
+  pointer-events:auto;cursor:pointer;
+  box-shadow:inset 0 0 0 1px var(--cinnabar);
+}
 
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -1254,8 +1258,47 @@ document.addEventListener("touchend", e => {
 
 render();
 
+/* ---------- aggiornamento automatico ----------
+   Il service worker confronta il codice appena servito con quello in rete e
+   avvisa quando è cambiato. Qui si decide cosa farne: se l'app è appena stata
+   aperta e non l'hai ancora toccata, si ricarica da sé e non te ne accorgi;
+   se ci stai leggendo dentro, si propone e basta — ricaricarti la pagina sotto
+   il dito mentre leggi la guida sarebbe peggio del problema. */
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){
+  const apertaDa = Date.now();
+  let toccata = false;
+  ["pointerdown","keydown","wheel","touchstart"].forEach(ev =>
+    addEventListener(ev, () => { toccata = true; }, { passive:true, once:true }));
+
+  let giaDetto = false;
+  function nuovaVersione(){
+    if(giaDetto) return;
+    giaDetto = true;
+    const appenaAperta = Date.now() - apertaDa < 8000;
+    if(appenaAperta && !toccata){ location.reload(); return; }
+    const t = $("#toast");
+    clearTimeout(t._x);
+    t.textContent = "Nuova versione · tocca per aggiornare";
+    t.classList.add("on","tap");
+    t.onclick = () => location.reload();
+  }
+
+  navigator.serviceWorker.addEventListener("message", e => {
+    if(e.data && e.data.tipo === "aggiornata") nuovaVersione();
+  });
+
   window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(()=>{}));
+
+  // Un'app aggiunta alla Home può restare aperta per giorni senza mai
+  // ricaricare: quando torna in primo piano si ricontrolla, non più di una
+  // volta ogni mezz'ora per non consumare dati a vuoto.
+  let ultimo = Date.now();
+  document.addEventListener("visibilitychange", () => {
+    if(document.visibilityState !== "visible") return;
+    if(Date.now() - ultimo < 1800000) return;
+    ultimo = Date.now();
+    fetch("./index.html", { cache: "no-store" }).catch(()=>{});
+  });
 }
 </script>
 </body>
