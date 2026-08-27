@@ -1,0 +1,75 @@
+[
+{
+ "nome": "Esercito di Terracotta",
+ "durata": "2-3 ore",
+ "fonte": "https://en.wikipedia.org/wiki/Terracotta_Army",
+ "intro": "Il sito è tre fosse e un museo, e si visitano in un ordine preciso — il tuo itinerario dice giustamente Fossa 1, poi 3, poi 2, e ha ragione: se cominci dalla più grande le altre sembrano piccole, ma se le fai in questo ordine ognuna aggiunge una cosa che la precedente non aveva. Furono trovate nel 1974 da contadini che stavano scavando un pozzo.",
+ "punti": [
+  {"n":"Fossa 1","zh":"一号坑","ll":[34.383602,109.278231],"foto":"te-1",
+   "d":"La grande, quella delle fotografie: un capannone sopra una fossa lunga più di duecento metri, con migliaia di fanti in colonna dentro corridoi separati da muri di terra battuta. Guarda le file da un capo: è una formazione di marcia vera, con l'avanguardia in testa e i fianchi rivolti all'esterno. Non è un ammasso di statue, è un esercito schierato.",
+   "cur":"Nessuna faccia è uguale a un'altra. Le teste furono modellate a parte e assemblate sui corpi, con orecchie e nasi che variano; si pensa fossero composte a partire da una serie di stampi ricombinati, non ritratti di persone reali. Erano anche tutte dipinte a colori vivaci — la lacca sotto il colore si arriccia e si stacca in pochi minuti all'aria secca, ed è per questo che oggi sono grigie e che gran parte del sito resta deliberatamente non scavato."},
+  {"n":"Fossa 3","zh":"三号坑","ll":[34.384235,109.277357],"foto":"te-3",
+   "d":"La più piccola delle tre, e la più interessante da capire: settanta figure circa, disposte non in formazione ma affacciate le une alle altre. È il posto di comando. Ci sono un carro con quattro cavalli e ufficiali, e nessun fante di linea.",
+   "cur":"È l'unica fossa che non fu incendiata. Le altre due furono saccheggiate e bruciate pochi anni dopo la sepoltura, probabilmente dalle truppe ribelli che rovesciarono i Qin: le travi del soffitto crollarono sulle statue e le fecero a pezzi, ed è il motivo per cui gran parte di quello che vedi è stato rimontato da frammenti."},
+  {"n":"Fossa 2","zh":"二号坑","ll":[34.384515,109.279098],"foto":"te-2",
+   "d":"La più varia: qui ci sono arcieri inginocchiati, cavalleria con i cavalli, carri da guerra e fanteria mescolati in quattro schieramenti diversi. È scavata solo in parte apposta, e vedere la terra ancora chiusa accanto alle figure liberate è il colpo d'occhio che spiega meglio la dimensione della cosa.",
+   "cur":"L'arciere inginocchiato di questa fossa è la statua meglio conservata dell'intero sito: era protetta dalla propria posizione bassa quando il soffitto crollò. Su alcune di queste figure si vedono ancora tracce di colore. Le armi di bronzo trovate qui erano ancora affilate dopo duemila anni, grazie a un rivestimento superficiale che ne ha rallentato la corrosione."},
+  {"n":"Museo","zh":"","ll":[34.384761,109.280523],"foto":"te-5",
+   "d":"L'edificio espositivo, dove stanno le cose piccole: armi, finimenti, e soprattutto i due carri di bronzo in scala ridotta trovati vicino al tumulo, fra gli oggetti in bronzo più complessi mai fusi nell'antichità. Se hai tempo per una cosa sola dopo le fosse, è questa.",
+   "cur":"Il tumulo vero dell'imperatore, un chilometro e mezzo a ovest, non è mai stato aperto. Le fonti antiche descrivono al suo interno una riproduzione dell'impero con fiumi di mercurio in movimento, e le analisi del terreno intorno mostrano davvero concentrazioni di mercurio molto superiori alla norma. Non si scava perché non si sa ancora come conservare quel che c'è dentro: la lezione dei colori scomparsi è stata imparata."}
+ ]},
+{
+ "nome": "Torre della Campana",
+ "durata": "1 ora",
+ "fonte": "https://en.wikipedia.org/wiki/Bell_Tower_of_Xi%27an",
+ "intro": "Sei nel centro geometrico della Xi'an murata: da questo incrocio partono i quattro assi che vanno alle quattro porte. Come a Pechino c'è una coppia di torri, campana e tamburo, ma qui sono molto più vicine — duecento metri — e l'arco della seconda è la porta d'ingresso al quartiere musulmano, che è la tua tappa dopo.",
+ "punti": [
+  {"n":"Torre della Campana","zh":"钟楼","ll":[34.259425,108.946998],"foto":"xi-1",
+   "d":"Al centro esatto della rotatoria, su una base di mattoni quadrata, con tre tetti sovrapposti in legno dipinto. Ci si arriva da un sottopassaggio, non attraversando il traffico. Di sera è illuminata e la si vede da tutti e quattro i viali insieme: è per questo che il tuo itinerario ti ci porta alle sette.",
+   "cur":"Non è sempre stata qui. Fu costruita alla fine del Trecento circa duecento metri più a ovest, e nel Cinquecento fu smontata e rimontata pezzo per pezzo in questa posizione, per rimetterla al centro di una città che nel frattempo si era spostata. Una torre di legno di quindici metri traslocata a mano."},
+  {"n":"Torre del Tamburo","zh":"鼓楼","ll":[34.260168,108.943489],"foto":"xi-2",
+   "d":"Duecento metri a nord-ovest, più larga e più bassa della campana, con un grande arco alla base che si attraversa a piedi. Dentro c'è una collezione di tamburi. La coppia funzionava come a Pechino: la campana all'alba, il tamburo al tramonto — «campana del mattino e tamburo della sera» è un modo di dire cinese che nasce da qui.",
+   "cur":"Sotto l'arco, dall'altra parte, comincia il quartiere musulmano: fai due passi e il paesaggio cambia di colpo — insegne in arabo, agnello sugli spiedi, berretti bianchi. La comunità hui di Xi'an è qui da più di mille anni, arrivata lungo la via della seta di cui questa città era il capolinea orientale."},
+  {"n":"Quartiere musulmano","zh":"回民街","ll":[34.260621,108.94351],"foto":"xi-8",
+   "d":"Non è una via sola: è un reticolo di vicoli dietro la torre del tamburo, e la strada principale — quella con le insegne luminose — è la più turistica e la meno interessante. Gira nelle traverse: Xiyangshi e Beiyuanmen hanno la stessa roba con metà della gente e prezzi più onesti.",
+   "cur":"Le cose da mangiare che qui hanno senso: il roujiamo, panino con carne di manzo brasata; gli spiedini di agnello al cumino; i noodles biang biang, il cui carattere cinese ha più di cinquanta tratti ed è così complicato da non esistere in molti sistemi di scrittura digitale. Niente maiale in tutto il quartiere, ed è il motivo per cui l'agnello qui è così buono: è quello che sanno fare."}
+ ]},
+{
+ "nome": "Grande Moschea di Xi'an",
+ "durata": "1 ora",
+ "fonte": "https://en.wikipedia.org/wiki/Great_Mosque_of_Xi%27an",
+ "intro": "È la cosa che ti sorprenderà di più a Xi'an, e ci arrivi da un vicolo di bancarelle che non lascia sospettare niente. Da fuori non si vede: nessuna cupola, nessun minareto, nessuna facciata. Dentro sono quattro cortili in fila come in un tempio cinese, con padiglioni, alberi e stele — e solo l'iscrizione in arabo, quando la trovi, ti dice dove sei.",
+ "punti": [
+  {"n":"Xiyangshi","zh":"西羊市","ll":[34.263127,108.941266],"foto":null,
+   "d":"Il vicolo da cui si arriva: «mercato delle pecore occidentale», e il nome dice tutto sul quartiere. Bancarelle da tutte e due le parti, ed è così stretto che ci si passa in fila. La moschea è dietro una porta che non sembra niente: se non stai attento la superi.",
+   "cur":"Questo reticolo di vicoli è il quartiere hui di Xi'an, cioè di cinesi musulmani — non di stranieri. Parlano cinese, scrivono cinese, e la loro presenza qui risale ai secoli in cui questa città era il capolinea della via della seta e ci arrivavano mercanti persiani e arabi. Sono cinesi da più tempo di quanto molti stati europei esistano."},
+  {"n":"Grande Moschea","zh":"清真大寺","ll":[34.261779,108.941165],"foto":"xi-3",
+   "d":"Quattro cortili in sequenza da est a ovest, ognuno con la propria porta. Ci sono un arco di legno del Seicento, un padiglione ottagonale che fa da minareto — si chiama Torre dell'Introspezione e da lì si chiamava alla preghiera — e in fondo la sala di preghiera vera, che non si visita perché è in uso.",
+   "cur":"L'orientamento è la cosa da notare: i templi cinesi guardano a sud, questa guarda a ovest, perché verso ovest sta la Mecca. È il compromesso perfetto fra due tradizioni: la forma è interamente cinese — tetti, cortili, stele, giardini — e l'asse è islamico. Chi l'ha costruita non ha copiato l'architettura araba: ha usato la propria per fare una cosa diversa."},
+  {"n":"Tempio del Dio della Città","zh":"都城隍庙","ll":[34.260839,108.937308],"foto":null,
+   "d":"Poco più a ovest, un tempio taoista dedicato al dio protettore della città — ogni città cinese ne aveva uno, una specie di magistrato divino che giudicava i morti. Ci si arriva per un lungo corridoio di botteghe. È molto meno curato della moschea e molto meno visitato.",
+   "cur":"Se ci passi hai visto in cinquecento metri tre religioni diverse convivere: islam, taoismo, e i templi buddhisti poco più in là. Xi'an è stata per secoli la città più cosmopolita dell'Asia, e questo fazzoletto di vicoli è quel che resta di quella condizione — non un museo, ma un quartiere dove la gente abita."}
+ ]},
+{
+ "nome": "Mura di Xi'an",
+ "durata": "1 ora e mezza in bici",
+ "fonte": "https://en.wikipedia.org/wiki/Fortifications_of_Xi%27an",
+ "intro": "Sono le mura urbane meglio conservate della Cina e uno dei pochi circuiti completi rimasti al mondo: quasi quattordici chilometri di anello chiuso, larghi in cima abbastanza da farci passare le auto. In bici si girano in un'ora e mezza senza sforzarsi, e sono un modo di vedere la città che nessun'altra prospettiva dà: sei sopra i tetti ma dentro il traffico.",
+ "punti": [
+  {"n":"Porta Yongning (sud)","zh":"永宁门","ll":[34.251514,108.946973],"foto":null,
+   "d":"La porta principale, la più monumentale, e quella dove noleggi e riconsegni la bici. «Yongning» significa pace eterna: era la porta rivolta verso sud, cioè verso il resto dell'impero, e per questo era quella da cui entravano le delegazioni ufficiali. Il complesso è a tre corpi in fila — torre di guardia, barbacane e torre principale — come era Zhengyangmen a Pechino prima che ne demolissero il recinto.",
+   "cur":"Da qui la metropolitana linea 2 va dritta a Xi'an Nord, che è il tuo treno del giorno dopo. Se riconsegni qui la bici, il resto della giornata si incastra senza tornare indietro: è il motivo per cui l'itinerario dice di finire il giro proprio a questa porta e non a un'altra."},
+  {"n":"Sopra le mura","zh":"西安城墙","ll":[34.263622,108.948311],"foto":"xi-5",
+   "d":"La superficie in cima è larga dai dodici ai quindici metri: ci giravano i carri e le squadre di soldati. Oggi ci sono le bici a noleggio, tandem compresi. Il giro completo è quasi quattordici chilometri e non c'è nessuna salita: è piatto per tutta la lunghezza, e l'unica fatica sono i sanpietrini.",
+   "cur":"Ogni centoventi metri circa c'è un bastione che sporge verso l'esterno. Non è decorazione: la distanza è calcolata sulla gittata di una freccia, in modo che ogni tratto di muro fosse coperto dal tiro dei due bastioni che lo affiancano. È la stessa logica delle torri ravvicinate di Jinshanling, applicata a una città invece che a un crinale."},
+  {"n":"Porta Anding (ovest)","zh":"安定门","ll":[34.259372,108.925071],"foto":null,
+   "d":"La porta occidentale, e storicamente la più importante di tutte dopo quella sud: da qui partiva la via della seta. Chi usciva da questo arco andava verso il corridoio dell'Hexi, il deserto del Taklamakan, Samarcanda e infine il Mediterraneo.",
+   "cur":"Il nome significa «stabilità pacificata», ed è un nome di frontiera: guardava verso i territori che l'impero doveva tenere buoni. Vale la pena fermarsi un attimo e girarsi a est, verso il centro: quello che hai alle spalle sono ottomila chilometri di strada, e il fatto che questa città sia il capolinea è il motivo per cui esiste il quartiere musulmano che hai attraversato ieri sera."},
+  {"n":"Porta Anyuan (nord)","zh":"安远门","ll":[34.27599,108.947284],"foto":"xi-7",
+   "d":"La porta settentrionale, quella che guarda verso la stazione di Xi'an Nord e verso la parte moderna della città. Da qui la vista è la meno storica e la più utile per capire dove sei: fuori dalle mura si vedono i grattacieli, dentro il tessuto basso della città vecchia. La linea si vede a occhio.",
+   "cur":"Le mura che vedi sono Ming, di fine Trecento, ma stanno sopra il tracciato di quelle Tang — e la città Tang era una cosa completamente diversa: sei o sette volte più grande di questo anello, un milione di abitanti, la città più popolosa del mondo del suo tempo. Quello che giri in bici in un'ora e mezza è la Xi'an che si è ritirata dentro sé stessa dopo che l'impero le aveva tolto la capitale."},
+  {"n":"Porta Changle (est)","zh":"长乐门","ll":[34.259313,108.971199],"foto":null,
+   "d":"La porta orientale, «lunga felicità». È la meno visitata delle quattro e quella con il tratto di mura più tranquillo intorno, se vuoi fermarti a guardare la città senza gente addosso.",
+   "cur":"Nel dicembre del 1936 a Xi'an successe una delle cose decisive della storia cinese: due generali sequestrarono Chiang Kai-shek e lo costrinsero ad allearsi con i comunisti contro l'invasione giapponese. È noto come l'incidente di Xi'an, e il luogo dove fu tenuto prigioniero è a poche centinaia di metri da questa porta, dentro le mura."}
+ ]}
+]

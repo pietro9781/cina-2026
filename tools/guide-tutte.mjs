@@ -1,4 +1,12 @@
 import pw from '/Users/pigr/Developer/fe-forum-event-web/node_modules/@playwright/test/index.js';
+import fs from 'node:fs';
+// le attese si ricavano dai dati, non si scrivono a mano: cosi' non si rompono
+// ogni volta che si aggiunge una citta'
+const { GUIDE } = await import('../guida.js');
+const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const DAYS = eval(html.match(/const DAYS = (\[[\s\S]*?\n\];)/)[1].slice(0, -1));
+const attesiPulsanti = DAYS.flatMap(d => d.stops).filter(s => GUIDE[s.n]).length;
+const attesiGiorni   = DAYS.filter(d => d.stops.some(s => GUIDE[s.n])).length;
 const { chromium, devices } = pw;
 const ok=(c,m)=>console.log((c?'OK   ':'ROTTO')+'  '+m);
 const b = await chromium.launch();
@@ -15,8 +23,13 @@ for (let i=0;i<14;i++){
   if (n) perGiorno.push([i+1, n, await page.locator('[data-guida]').allTextContents()]);
 }
 perGiorno.forEach(([g,n,t])=>console.log(`   giorno ${String(g).padStart(2)}: ${n} guida/e — ${t.map(x=>x.trim()).join(' | ')}`));
-ok(perGiorno.length === 4, `giornate con almeno una guida: ${perGiorno.length}`);
-ok(perGiorno.reduce((a,[,n])=>a+n,0) === 8, `pulsanti Guida in totale: ${perGiorno.reduce((a,[,n])=>a+n,0)}`);
+ok(perGiorno.length === attesiGiorni, `giornate con una guida: ${perGiorno.length} (attese ${attesiGiorni})`);
+ok(perGiorno.reduce((a,[,n])=>a+n,0) === attesiPulsanti,
+   `pulsanti Guida: ${perGiorno.reduce((a,[,n])=>a+n,0)} (attesi ${attesiPulsanti})`);
+// e nessuna guida deve restare orfana, senza una tappa che la apra
+const nomi = new Set(DAYS.flatMap(d => d.stops.map(s => s.n)));
+const orfane = Object.keys(GUIDE).filter(k => !nomi.has(k));
+ok(orfane.length === 0, orfane.length ? `guide orfane: ${orfane}` : 'nessuna guida orfana');
 
 // apri ogni guida e controllala
 let totPunti=0, totFoto=0, rotte=[];
