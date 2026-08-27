@@ -244,7 +244,11 @@ h3.sec:first-of-type{margin-top:6px}
 .gpunto.on .gnum{box-shadow:0 0 0 4px rgba(188,59,46,.2)}
 .act.guida{border-color:var(--cinnabar);color:var(--cinnabar)}
 .gintro{font-size:15px;color:var(--ink-2);margin:0 0 18px;line-height:1.55}
-.gpunto{display:grid;grid-template-columns:26px 1fr;column-gap:12px;margin:0 0 22px}
+.gpunto{
+  display:grid;grid-template-columns:26px 1fr;column-gap:12px;margin:0 0 22px;
+  /* la mappa resta appiccicata in alto: chi ci scorre sopra non deve finirci sotto */
+  scroll-margin-top:calc(var(--headh,120px) + var(--gmaph,270px) + 12px);
+}
 .gnum{
   width:26px;height:26px;border-radius:50%;background:var(--cinnabar);color:#fff;
   display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:500;
@@ -258,7 +262,26 @@ h3.sec:first-of-type{margin-top:6px}
   display:block;margin-bottom:6px;
 }
 .gpunto p{margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.52}
-.gpunto .acts{margin-top:8px}
+.gpunto .acts{margin-top:10px}
+.gfoto{margin:8px 0 10px}
+.gfoto img{
+  width:100%;aspect-ratio:3/2;object-fit:cover;display:block;
+  border:1px solid var(--line);border-radius:3px;background:var(--paper);
+}
+.gfoto figcaption{
+  font-family:var(--mono);font-size:9px;letter-spacing:.04em;color:var(--mute);
+  margin-top:4px;line-height:1.45;
+}
+.gfoto a{color:var(--mute)}
+.gcur{
+  border-left:3px solid var(--gold);background:var(--paper);
+  border-radius:0 3px 3px 0;padding:9px 12px;margin:10px 0 0;
+  font-size:14px;color:var(--ink-2);line-height:1.5;
+}
+.gcur .lbl{
+  display:block;font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:4px;
+}
 .gcoda{
   border-left:3px solid var(--gold);background:var(--paper);border:1px solid var(--line);
   border-left:3px solid var(--gold);border-radius:3px;padding:11px 13px;
@@ -1029,7 +1052,12 @@ function renderGuida(){
       <div>
         <h2>${esc(p.n)}</h2>
         <span class="zh">${esc(p.zh || "")}</span>
+        ${p.foto ? `<figure class="gfoto">
+          <img src="${esc(p.foto.f)}" alt="${esc(p.n)}" loading="lazy">
+          <figcaption>${esc(p.foto.autore)} · ${esc(p.foto.licenza)} · <a href="${esc(p.foto.fonte)}" target="_blank" rel="noopener">Wikimedia Commons</a></figcaption>
+        </figure>` : ""}
         <p>${esc(p.d)}</p>
+        ${p.curiosita ? `<div class="gcur"><span class="lbl">Curiosità</span>${esc(p.curiosita)}</div>` : ""}
         <div class="acts">
           <a class="act" href="${amap(p.ll, p.n)}" target="_blank" rel="noopener">Amap</a>
           <button class="act" data-copy="${coordText(p.ll)}">Copia coord.</button>
@@ -1058,7 +1086,7 @@ function renderGuida(){
     </div>
     ${punti}
     ${g.coda ? `<p class="gcoda">${esc(g.coda)}</p>` : ""}
-    <p class="avviso">Le posizioni sui punti vengono da OpenStreetMap e sono verificate. I testi no: sono scritti a memoria, e su una data o un numero preciso possono sbagliare. Dove una cosa è leggenda e non storia, sta scritto.</p>`;
+    <p class="avviso">Le posizioni dei punti vengono da OpenStreetMap e sono verificate; le foto da Wikimedia Commons, con autore e licenza sotto ognuna. I testi no: sono scritti a memoria, e su una data o un numero preciso possono sbagliare. Dove una cosa è leggenda e non storia, sta scritto.</p>`;
 
   const note = $("#mapnoteGuida");
   const drawn = drawMap($("#mapGuida"), g.punti.map((p, i) => ({
@@ -1103,9 +1131,16 @@ function renderGuida(){
 
   $("#gBack").onclick = () => { tab = "days"; render(); };
   window.scrollTo({top:0, behavior:"instant"});
-  // La testata e' alta quanto e' alta: la mappa ci si appoggia sotto.
-  const h = document.querySelector("header");
-  if(h) document.documentElement.style.setProperty("--headh", h.offsetHeight + "px");
+  // Testata e mappa sono alte quanto sono alte: si misurano invece di
+  // indovinarle, così scorrendo a un punto il suo titolo non finisce sotto.
+  const misura = () => {
+    const h = document.querySelector("header");
+    const m = document.querySelector(".gmap");
+    if(h) document.documentElement.style.setProperty("--headh", h.offsetHeight + "px");
+    if(m) document.documentElement.style.setProperty("--gmaph", m.offsetHeight + "px");
+  };
+  misura();
+  requestAnimationFrame(misura);
 }
 
 function renderLog(){

@@ -16,7 +16,20 @@ const ASSETS = [
   "./manifest.webmanifest",
   "./icon-180.png",
   "./icon-192.png",
-  "./icon-512.png"
+  "./icon-512.png",
+  "./foto/fc-01.jpg",
+  "./foto/fc-02.jpg",
+  "./foto/fc-03.jpg",
+  "./foto/fc-04.jpg",
+  "./foto/fc-05.jpg",
+  "./foto/fc-06.jpg",
+  "./foto/fc-07.jpg",
+  "./foto/fc-08.jpg",
+  "./foto/fc-09.jpg",
+  "./foto/fc-10.jpg",
+  "./foto/fc-11.jpg",
+  "./foto/fc-12.jpg",
+  "./foto/fc-13.jpg"
 ];
 
 /* Quanti riquadri di mappa tenere. A ~15 KB l'uno sono circa 18 MB: molto meno

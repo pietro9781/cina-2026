@@ -28,7 +28,7 @@ ok(asse.every((p,i)=> i===0 || p.y <= asse[i-1].y + 3),
 
 // toccare una sezione porta la mappa sul punto
 const zPrima = await page.evaluate(()=>document.querySelector('.leaflet-tile')?.src.match(/[?&]z=(\d+)/)?.[1]);
-await page.locator('[data-gp="5"]').click();
+await page.evaluate(()=>document.querySelector('[data-gp="5"]').click());
 await page.waitForTimeout(1800);
 const zDopo = await page.evaluate(()=>document.querySelector('.leaflet-tile')?.src.match(/[?&]z=(\d+)/)?.[1]);
 ok(+zDopo > +zPrima, `toccando il punto 6 la mappa si avvicina: z${zPrima} -> z${zDopo}`);
@@ -54,6 +54,21 @@ ok(/Asse imperiale/.test(await page.locator('h1').textContent()), 'si torna al g
 await page.locator('[data-guida]').click(); await page.waitForTimeout(1800);
 ok(await page.locator('#tabDays[aria-current="page"]').count() === 1, 'la barra resta su Giorni');
 
+// foto e curiosita
+ok(await page.locator('.gfoto img').count() === 13, `foto: ${await page.locator('.gfoto img').count()}/13`);
+ok(await page.locator('.gcur').count() === 13, `curiosita: ${await page.locator('.gcur').count()}/13`);
+// loading="lazy": vanno scorse tutte prima di poterle giudicare
+await page.evaluate(async () => {
+  for (const el of document.querySelectorAll('.gfoto img')) { el.loading = 'eager'; el.scrollIntoView(); }
+  window.scrollTo(0, 0);
+});
+await page.waitForTimeout(2500);
+const rotte = await page.evaluate(() => [...document.querySelectorAll('.gfoto img')]
+  .filter(i => !i.complete || i.naturalWidth === 0).map(i => i.getAttribute('src')));
+ok(rotte.length === 0, rotte.length ? 'IMMAGINI ROTTE: '+rotte.join(', ') : 'tutte le immagini caricano davvero');
+const crediti = await page.locator('.gfoto figcaption').allTextContents();
+ok(crediti.every(c => /·/.test(c) && c.length > 12), 'ognuna ha autore e licenza');
+console.log('   esempio credito:', crediti[0]);
 const parole = (await page.locator('.wrap').innerText()).split(/\s+/).length;
 console.log(`\nparole nella guida: ${parole}`);
 console.log('errori:', errs.length?errs:'nessuno');
