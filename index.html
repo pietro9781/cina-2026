@@ -201,6 +201,39 @@ h3.sec:first-of-type{margin-top:6px}
 .note{font-size:13px;color:var(--mute);margin:10px 2px 0;line-height:1.5}
 
 /* ---------- mappa ---------- */
+/* ---------- salto fra una tappa e l'altra ---------- */
+.gap{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;
+  color:var(--mute);margin:12px 0 0;display:flex;align-items:center;gap:6px;
+}
+.gap::before{content:"";width:14px;height:1px;background:var(--line);flex:0 0 auto}
+.gap.far{color:var(--gold)}
+
+/* ---------- dove sei adesso ---------- */
+.stop.now .card h2{color:var(--cinnabar)}
+.stop.now .thread::after{
+  background:var(--cinnabar);border-color:var(--cinnabar);
+  box-shadow:0 0 0 3px rgba(188,59,46,.18);
+}
+.nowtag{
+  display:inline-block;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.12em;text-transform:uppercase;color:#fff;
+  background:var(--cinnabar);border-radius:2px;padding:1px 5px;
+  vertical-align:2px;margin-left:6px;
+}
+.pin--now{box-shadow:0 0 0 2px var(--paper),0 0 0 6px rgba(188,59,46,.28),0 1px 3px rgba(20,32,29,.4)}
+
+/* ---------- scarica le mappe ---------- */
+.dl button{
+  width:100%;font-family:var(--body);font-size:14px;font-weight:500;
+  background:var(--paper);border:1px solid var(--line);color:var(--ink);
+  border-radius:3px;padding:12px 10px;cursor:pointer;
+}
+.dl button:disabled{opacity:.6;cursor:default}
+.dl button.done{border-color:var(--jade);color:var(--jade)}
+.dl .bar{height:2px;background:var(--line-soft);border-radius:2px;margin-top:6px;overflow:hidden}
+.dl .bar i{display:block;height:100%;width:0;background:var(--jade);transition:width .2s linear}
+
 .mapwrap{margin:0 0 18px}
 .maplab{
   font-family:var(--mono);font-size:10px;letter-spacing:.16em;
@@ -484,7 +517,8 @@ const DAFARE = [
 ];
 
 import {
-  toGCJ, toWGS, haversine, splitFrames, frameLabels, boundsOf, fmtDistance
+  toGCJ, toWGS, haversine, splitFrames, frameLabels, boundsOf, fmtDistance,
+  walkMinutes, currentStopIndex, fitZoom, viewportTiles
 } from "./geo.js";
 
 /* ---------- helpers ---------- */
@@ -588,6 +622,71 @@ function drawMap(el, points, opts){
   return { map, markers };
 }
 
+/* ---------- scaricare tutte le mappe in anticipo ---------- */
+
+/** Misurate sul telefono: il contenitore della mappa e' 356x248. */
+const MAP_W = 356, MAP_H = 248;
+
+/**
+ * Ogni riquadro che l'app potrà mostrare: le giornate, la panoramica, e due
+ * livelli di zoom in più per quando ci si avvicina. In tutte e due le lingue,
+ * altrimenti chi cambia lingua in Cina si ritrova la cache vuota.
+ */
+function allTiles(){
+  const viste = [];
+  DAYS.forEach((d, i) => {
+    splitFrames(d.stops).forEach(f => {
+      const pts = f.filter(x => x.ll).map(x => toGCJ(x.ll));
+      if(pts.length) viste.push({ b: boundsOf(pts), max: pts.length === 1 ? 13 : 16 });
+    });
+  });
+  const cents = [...baseCentroids().values()];
+  if(cents.length) viste.push({ b: boundsOf(cents, 0.10), max: 9 });
+
+  const chiavi = new Set();
+  viste.forEach(v => {
+    const z = fitZoom(v.b, MAP_W, MAP_H, v.max);
+    for(let zz = z; zz <= Math.min(z + 2, 18); zz++)
+      viewportTiles(v.b, zz, MAP_W, MAP_H).forEach(t => chiavi.add(`${t.z}/${t.x}/${t.y}`));
+  });
+
+  const urls = [];
+  chiavi.forEach(k => {
+    const [z, x, y] = k.split("/");
+    ["en", "zh_cn"].forEach(lang => {
+      const sub = (Number(x) + Number(y)) % 4 + 1;
+      urls.push(`https://webrd0${sub}.is.autonavi.com/appmaptile?lang=${lang}&size=1&scale=1&style=8&x=${x}&y=${y}&z=${z}`);
+    });
+  });
+  return urls;
+}
+
+/** Scarica tutto, sei alla volta. Il service worker li mette in cache da sé. */
+async function scaricaMappe(onProgress){
+  const urls = allTiles();
+  let fatti = 0;
+  async function passata(lista){
+    const falliti = [];
+    let i = 0;
+    async function worker(){
+      while(i < lista.length){
+        const u = lista[i++];
+        try {
+          const r = await fetch(u, { mode: "cors", cache: "default" });
+          if(!r || !r.ok) falliti.push(u);
+        } catch(e) { falliti.push(u); }
+        onProgress(Math.min(++fatti, urls.length), urls.length);
+      }
+    }
+    await Promise.all(Array.from({ length: 6 }, worker));
+    return falliti;
+  }
+  // Una seconda passata sui caduti: così "Fatto" vuol dire davvero fatto.
+  const falliti = await passata(urls);
+  if(falliti.length){ fatti -= falliti.length; await passata(falliti); }
+  return urls.length;
+}
+
 /** Estensione del riquadro, per l'etichetta ("1,7 km"). */
 function frameSpan(stops){
   const pts = stops.filter(s => s.ll).map(s => s.ll);
@@ -609,18 +708,30 @@ function renderRail(){
   if(act) act.scrollIntoView({block:"nearest", inline:"center", behavior:"smooth"});
 }
 
-function stopItem(s, n){
+/** Quanto c'è fino alla tappa dopo, e se ci si va a piedi. */
+function gapLine(from, to){
+  if(!from || !to || !from.ll || !to.ll) return "";
+  const m = haversine(from.ll, to.ll);
+  const min = walkMinutes(m);
+  const testo = min !== null
+    ? `${fmtDistance(m)} · ${min} min a piedi`
+    : `${fmtDistance(m)} · metro o taxi`;
+  return `<div class="gap${min === null ? " far" : ""}">${esc(testo)}</div>`;
+}
+
+function stopItem(s, n, dopo, adesso){
   return `
-    <li class="stop${s.opt?" opt":""}" data-stop="${n}">
+    <li class="stop${s.opt?" opt":""}${adesso?" now":""}" data-stop="${n}">
       <div class="time">${esc(s.t)}</div>
       <div class="thread"><div class="card">
-        <h2>${esc(s.n)}${s.opt?'<span class="tag">opzione</span>':""}</h2>
+        <h2>${esc(s.n)}${s.opt?'<span class="tag">opzione</span>':""}${adesso?'<span class="nowtag">adesso</span>':""}</h2>
         <p>${esc(s.d)}</p>
         ${s.ll ? `<div class="acts">
           <a class="act" href="${amap(s.ll, s.n)}" target="_blank" rel="noopener">Amap</a>
           <a class="act" href="${gmap(s.ll)}" target="_blank" rel="noopener">Google</a>
           <button class="act" data-copy="${coordText(s.ll)}">Copia coord.</button>
         </div>` : ""}
+        ${gapLine(s, dopo)}
       </div></div>
     </li>`;
 }
@@ -637,6 +748,9 @@ function renderDay(){
   const d = DAYS[day];
   const frames = splitFrames(d.stops);
   const labels = frameLabels(d, frames, DAYS[day-1], NOMI_BASI);
+
+  // Qual è la tappa di adesso: solo se il giorno mostrato è davvero oggi.
+  const tappaAdesso = stopOfNow(d);
 
   // Numerazione continua su tutta la giornata, non per riquadro.
   let counter = 0;
@@ -659,7 +773,9 @@ function renderDay(){
       </div>` : "";
     // Il treno sta fra i due riquadri: è lì che succede.
     const tr = (i === 1 && d.tr && frames.length === 2) ? transferStrip(d) : "";
-    return tr + mapHTML + `<ul class="stops">${f.map(x => stopItem(x.s, x.n)).join("")}</ul>`;
+    return tr + mapHTML + `<ul class="stops">${
+      f.map((x, k) => stopItem(x.s, x.n, f[k+1] && f[k+1].s, x.s === tappaAdesso)).join("")
+    }</ul>`;
   }).join("");
 
   view.innerHTML = `
@@ -700,9 +816,42 @@ function renderDay(){
   if(pp) pp.onclick = () => go(day-1);
   if(pn) pn.onclick = () => go(day+1);
   window.scrollTo({top:0, behavior:"instant"});
+  markNow();
 }
 
 const frameMarkers = new Map();
+let primoAvvio = true;
+
+/**
+ * La tappa di "adesso", ma solo se il giorno mostrato è oggi davvero.
+ * Sfogliando gli altri giorni non deve comparire niente: sarebbe una
+ * informazione falsa su una giornata che non stai vivendo.
+ */
+function stopOfNow(d){
+  const now = new Date();
+  const [y, m, gg] = d.date.split("-").map(Number);
+  if(now.getFullYear() !== y || now.getMonth()+1 !== m || now.getDate() !== gg) return null;
+  const i = currentStopIndex(d.stops, now.getHours()*60 + now.getMinutes());
+  return i === null ? null : d.stops[i];
+}
+
+/** Accende sulla mappa il segnaposto della tappa di adesso. */
+function markNow(){
+  const li = document.querySelector(".stop.now");
+  if(!li) return;
+  const n = +li.dataset.stop;
+  frameMarkers.forEach(({ drawn, nums }) => {
+    const idx = nums.indexOf(n);
+    if(idx < 0) return;
+    const el = drawn.markers[idx].getElement();
+    if(el && el.firstChild) el.firstChild.classList.add("pin--now");
+  });
+  // Solo alla prima apertura: dopo, cambiare scheda non deve far saltare la pagina.
+  if(primoAvvio){
+    primoAvvio = false;
+    requestAnimationFrame(() => li.scrollIntoView({ block:"center", behavior:"smooth" }));
+  }
+}
 
 /** Evidenzia insieme il segnaposto e la scheda, da qualsiasi lato si parta. */
 function selectStop(n){
@@ -848,6 +997,13 @@ function renderLog(){
       <h1>Logistica</h1></div>
     </div>
     <h3 class="sec">Da prenotare · ne restano ${restano}</h3><div class="rows">${df}</div>
+    <h3 class="sec">Mappe offline</h3>
+    <div class="dl">
+      <button id="dlBtn">Scarica tutte le mappe</button>
+      <div class="bar"><i id="dlBar"></i></div>
+    </div>
+    <p class="note" id="dlNote">Tutte e otto le città, tre livelli di zoom, in inglese e in cinese: circa 1700 riquadri, 25 MB, un minuto scarso di wi-fi. Fallo una volta prima di partire e le mappe ci sono anche senza rete, compresi i giorni che non hai ancora aperto.</p>
+
     <p class="note">Niente visto: fino al 31 dicembre 2026 i cittadini italiani con passaporto ordinario entrano in Cina continentale senza visto per soggiorni fino a 30 giorni. Tieni a portata la prova dell'uscita entro i 30 giorni — il treno per Hong Kong la copre.</p>
     <h3 class="sec">Otto basi, otto prenotazioni</h3><div class="rows">${basi}</div>
     <h3 class="sec">Sei treni</h3><div class="rows">${treni}</div>
@@ -904,6 +1060,24 @@ view.addEventListener("click", e => {
     localStorage.setItem(LANG_KEY, mapLang);
     toast(mapLang === "zh" ? "Mappa in cinese" : "Mappa in inglese");
     render();
+    return;
+  }
+  if(e.target.closest("#dlBtn")){
+    const b = $("#dlBtn"), bar = $("#dlBar"), nota = $("#dlNote");
+    if(b.disabled) return;
+    b.disabled = true;
+    scaricaMappe((fatti, tot) => {
+      b.textContent = `${fatti} / ${tot}`;
+      bar.style.width = Math.round(fatti / tot * 100) + "%";
+    }).then(tot => {
+      b.textContent = `Fatto · ${tot} riquadri`;
+      b.classList.add("done");
+      nota.textContent = "Le mappe sono nel telefono. Rifallo solo se cambi l'itinerario.";
+    }).catch(() => {
+      b.disabled = false;
+      b.textContent = "Scarica tutte le mappe";
+      nota.textContent = "Non è andata: controlla la rete e riprova.";
+    });
     return;
   }
   const row = e.target.closest("[data-base]");

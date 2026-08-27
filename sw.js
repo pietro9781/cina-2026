@@ -1,6 +1,6 @@
 /* Cina 2026 — cache-first, tutto precaricato all'installazione.
    Cambia CACHE quando aggiorni l'itinerario, così il telefono riscarica. */
-const CACHE = "cina-2026-v4";
+const CACHE = "cina-2026-v5";
 const TILES = "cina-2026-tiles-v1";
 const ASSETS = [
   "./",
@@ -16,7 +16,7 @@ const ASSETS = [
 
 /* Quanti riquadri di mappa tenere. A ~15 KB l'uno sono circa 18 MB: molto meno
    di una sola foto del viaggio, e bastano per tutte le città dell'itinerario. */
-const TILE_LIMIT = 1200;
+const TILE_LIMIT = 4000;
 const TILE_HOST = /^https:\/\/webrd0[1-4]\.is\.autonavi\.com\//;
 
 self.addEventListener("install", e => {

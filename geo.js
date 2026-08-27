@@ -178,3 +178,115 @@ export function fmtDistance(m) {
   if (m < 950) return Math.round(m / 10) * 10 + ' m';
   return (m / 1000).toFixed(m < 9500 ? 1 : 0).replace('.', ',') + ' km';
 }
+
+/* ---------- a piedi ---------- */
+
+/** Oltre questa distanza a piedi non ci si va, e il tempo non si mostra. */
+export const WALK_MAX_M = 2500;
+
+/** Le strade non sono in linea d'aria: si cammina circa un terzo in più. */
+const WALK_DETOUR = 1.3;
+const WALK_KMH = 4.5;
+
+/**
+ * Minuti a piedi fra due tappe, o null se è troppo lontano.
+ * Il null non è un errore: è il segnale che lì serve un mezzo, ed è
+ * esattamente l'informazione che si vuole a colpo d'occhio.
+ */
+export function walkMinutes(metres) {
+  if (!(metres >= 0) || metres > WALK_MAX_M) return null;
+  return Math.max(1, Math.round((metres * WALK_DETOUR) / 1000 / WALK_KMH * 60));
+}
+
+/* ---------- orari ---------- */
+
+/** "18:30" → 1110 minuti. Le tappe opzionali hanno "—" e tornano null. */
+export function hhmmToMinutes(t) {
+  const m = /^(\d{1,2}):(\d{2})$/.exec(String(t).trim());
+  if (!m) return null;
+  const h = +m[1], min = +m[2];
+  if (h > 23 || min > 59) return null;
+  return h * 60 + min;
+}
+
+/**
+ * Quale tappa è "adesso": l'ultima il cui orario è già passato.
+ * Prima della prima tappa della giornata si indica la prima, che è dove
+ * si sta andando. Le tappe senza orario non contano.
+ * Torna null se la giornata non ha nemmeno un orario.
+ */
+export function currentStopIndex(stops, minutesNow) {
+  let best = null;
+  let first = null;
+  stops.forEach((s, i) => {
+    const t = hhmmToMinutes(s.t);
+    if (t === null) return;
+    if (first === null) first = i;
+    if (t <= minutesNow) best = i;
+  });
+  return best !== null ? best : first;
+}
+
+/* ---------- riquadri da scaricare ---------- */
+
+const TILE = 256;
+
+function project(lat, lng, z) {
+  const n = TILE * 2 ** z;
+  return [
+    ((lng + 180) / 360) * n,
+    ((1 - Math.asinh(Math.tan((lat * Math.PI) / 180)) / Math.PI) / 2) * n,
+  ];
+}
+
+/** Lo zoom più stretto a cui i bounds ci stanno ancora dentro w×h pixel. */
+export function fitZoom(bounds, w, h, maxZoom = 16, minZoom = 3) {
+  for (let z = maxZoom; z >= minZoom; z--) {
+    const a = project(bounds[0][0], bounds[0][1], z);
+    const b = project(bounds[1][0], bounds[1][1], z);
+    if (Math.abs(b[0] - a[0]) <= w && Math.abs(b[1] - a[1]) <= h) return z;
+  }
+  return minZoom;
+}
+
+/** Tutti i riquadri che coprono i bounds a un dato zoom. */
+export function tileList(bounds, z) {
+  const a = project(bounds[1][0], bounds[0][1], z);
+  const b = project(bounds[0][0], bounds[1][1], z);
+  const x0 = Math.floor(Math.min(a[0], b[0]) / TILE);
+  const x1 = Math.floor(Math.max(a[0], b[0]) / TILE);
+  const y0 = Math.floor(Math.min(a[1], b[1]) / TILE);
+  const y1 = Math.floor(Math.max(a[1], b[1]) / TILE);
+  const out = [];
+  const max = 2 ** z;
+  for (let x = x0; x <= x1; x++)
+    for (let y = y0; y <= y1; y++)
+      if (x >= 0 && y >= 0 && x < max && y < max) out.push({ x, y, z });
+  return out;
+}
+
+/**
+ * I riquadri che servono davvero a disegnare una mappa larga w×h pixel
+ * centrata su quei bounds, con un anello di margine intorno.
+ *
+ * Non basta coprire i punti: fitBounds li fa stare DENTRO la vista, quindi la
+ * vista è sempre più larga dei punti, e Leaflet tiene in memoria anche un giro
+ * di riquadri oltre il bordo. Coprire solo i bounds lascia buchi ai lati —
+ * misurato: un giorno mai aperto mostrava 1 riquadro invece di 4.
+ */
+export function viewportTiles(bounds, z, w, h, ring = 1) {
+  const n = TILE * 2 ** z;
+  const cLat = (bounds[0][0] + bounds[1][0]) / 2;
+  const cLng = (bounds[0][1] + bounds[1][1]) / 2;
+  const [cx, cy] = project(cLat, cLng, z);
+  const x0 = Math.floor((cx - w / 2) / TILE) - ring;
+  const x1 = Math.floor((cx + w / 2) / TILE) + ring;
+  const y0 = Math.floor((cy - h / 2) / TILE) - ring;
+  const y1 = Math.floor((cy + h / 2) / TILE) + ring;
+  const max = 2 ** z;
+  const out = [];
+  for (let x = x0; x <= x1; x++)
+    for (let y = y0; y <= y1; y++)
+      if (x >= 0 && y >= 0 && x < max && y < max) out.push({ x, y, z });
+  return out;
+}

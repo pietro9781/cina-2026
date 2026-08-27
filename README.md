@@ -15,11 +15,28 @@ OpenStreetMap: è l'unico dei tre che si vede dalla Cina continentale senza VPN.
 Le etichette si possono mettere in inglese o in cinese col pulsante sotto la
 mappa — il cinese serve per farla vedere a un tassista.
 
-Le mappe già guardate restano in memoria (fino a 1200 riquadri, circa 18 MB),
-quindi conviene aprire la giornata dopo mentre si è ancora sul wi-fi
-dell'albergo. Senza rete e senza riquadri in memoria restano comunque il
-tracciato, i numeri delle tappe e la barra di scala: la mappa non diventa mai
-un rettangolo vuoto.
+In **Logistica** c'è il tasto **«Scarica tutte le mappe»**: si porta giù tutte
+e otto le città a tre livelli di zoom, in inglese e in cinese — circa 1700
+riquadri, 25 MB, un minuto di wi-fi. Fatto quello, le mappe ci sono offline
+anche per i giorni mai aperti. Senza farlo, restano in memoria solo i riquadri
+già guardati.
+
+Senza rete e senza riquadri in memoria restano comunque il tracciato, i numeri
+delle tappe e la barra di scala: la mappa non diventa mai un rettangolo vuoto.
+
+## Le altre due cose che l'app sa fare
+
+**Quanto c'è fino alla tappa dopo.** Sotto ogni scheda: «650 m · 11 min a
+piedi». Oltre i 2,5 km il tempo a piedi sparisce e compare «metro o taxi» —
+l'assenza del tempo *è* il segnale che lì serve un mezzo. I minuti tengono
+conto che le strade non sono in linea d'aria (si moltiplica per 1,3 e si
+cammina a 4,5 km/h), quindi sono una stima, non un cronometro.
+
+**«Adesso».** Se il giorno mostrato è davvero oggi, la tappa in corso è
+evidenziata in rosso e il suo segnaposto è acceso sulla mappa. Prima che la
+giornata cominci indica la prima tappa; a notte fonda resta l'ultima; le tappe
+opzionali (quelle senza orario) non diventano mai «adesso». Sfogliando gli
+altri giorni non compare niente, perché sarebbe un'informazione falsa.
 
 ## Le coordinate: due sistemi, non uno
 
@@ -79,7 +96,7 @@ vecchia.
 ## Verifiche
 
 ```bash
-node --test test/geo.test.mjs     # 23 controlli sulle conversioni e sui riquadri
+node --test test/geo.test.mjs     # 43 controlli: conversioni, riquadri, distanze a piedi, orologio
 node tools/frames-check.mjs       # come si dividono i 14 giorni, e le tappe senza coordinate
 ```
 
