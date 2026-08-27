@@ -6,7 +6,7 @@ const errs=[]; page.on('pageerror',e=>errs.push(e.message));
 const ok=(c,m)=>console.log((c?'OK   ':'ROTTO')+'  '+m);
 await page.goto('http://localhost:8899/',{waitUntil:'networkidle'});
 await page.locator('.chip').nth(2).click(); await page.waitForTimeout(1600);
-await page.locator('[data-guida]').click(); await page.waitForTimeout(3000);
+await page.locator('[data-guida]').first().click(); await page.waitForTimeout(3000);
 
 const H = (await page.viewportSize()).height;
 // in cima la mappa si vede

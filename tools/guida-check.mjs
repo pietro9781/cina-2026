@@ -9,10 +9,10 @@ const ok=(c,m)=>console.log((c?'OK   ':'ROTTO')+'  '+m);
 await page.goto('http://localhost:8899/',{waitUntil:'networkidle'});
 await page.locator('.chip').nth(2).click();          // 8 set, Citta Proibita
 await page.waitForTimeout(2000);
-ok(await page.locator('[data-guida]').count() === 1, 'il pulsante Guida c\'e su una sola tappa');
-ok(/13 tappe/.test(await page.locator('[data-guida]').textContent()), 'e dice quanti punti');
+ok(await page.locator('[data-guida]').count() === 4, `l'8 settembre ha 4 guide: ${await page.locator('[data-guida]').count()}`);
+ok(/13 tappe/.test(await page.locator('[data-guida]').first().textContent()), 'la prima e la Citta Proibita, con 13 punti');
 
-await page.locator('[data-guida]').click();
+await page.locator('[data-guida]').first().click();
 await page.waitForTimeout(2800);
 ok(/Città Proibita/.test(await page.locator('h1').textContent()), 'si apre la guida');
 ok(await page.locator('.gpunto').count() === 13, `13 punti: ${await page.locator('.gpunto').count()}`);
@@ -52,7 +52,7 @@ await page.waitForTimeout(1500);
 ok(/Asse imperiale/.test(await page.locator('h1').textContent()), 'si torna al giorno');
 
 // e la barra in basso resta su GIORNI durante la guida
-await page.locator('[data-guida]').click(); await page.waitForTimeout(1800);
+await page.locator('[data-guida]').first().click(); await page.waitForTimeout(1800);
 ok(await page.locator('#tabDays[aria-current="page"]').count() === 1, 'la barra resta su Giorni');
 
 // foto e curiosita
