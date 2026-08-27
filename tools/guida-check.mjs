@@ -39,11 +39,12 @@ ok(/Muro dei Nove Draghi/.test(await page.locator('#gWhere').textContent()),
 // e "Tutti" torna indietro
 await page.locator('#gAll').click(); await page.waitForTimeout(1500);
 ok(await page.locator('.gpunto.on').count()===0, '"Tutti" spegne la selezione');
-// la mappa resta attaccata mentre si scorre
+// scorrendo, la mappa se ne va: leggere ha la precedenza (vedi lettura-check)
 await page.evaluate(()=>window.scrollTo(0,1600)); await page.waitForTimeout(800);
 const vis = await page.evaluate(()=>{ const r=document.querySelector('#mapGuida').getBoundingClientRect();
   return r.top < window.innerHeight && r.bottom > 0; });
-ok(vis, 'scorrendo il testo la mappa resta in vista');
+ok(!vis, 'scorrendo il testo la mappa esce di vista e lascia leggere');
+ok(await page.locator('.mapfab.on').count() === 1, 'e resta richiamabile col tasto');
 
 // il ritorno
 await page.locator('#gBack').click();

@@ -235,11 +235,35 @@ h3.sec:first-of-type{margin-top:6px}
 .dl .bar i{display:block;height:100%;width:0;background:var(--jade);transition:width .2s linear}
 
 /* ---------- guida dentro un sito ---------- */
-/* La mappa resta in vista mentre si legge: camminando serve sempre, e i punti
-   sono a 60 m l'uno dall'altro — a vederli tutti insieme si accavallano, quindi
-   e' la mappa a seguire la lettura invece del contrario. */
-.gmap{position:sticky;top:var(--headh,120px);z-index:6;background:var(--celadon);padding:6px 0 10px}
+/* La mappa sta in cima e scorre via: tenerla sempre a schermo si mangiava 370
+   pixel su 844 e leggere diventava scomodo. Quando esce di vista compare un
+   tasto che la richiama come pannello dal basso, senza perdere il segno. */
+.gmap{margin:0 0 18px}
 .gmap .map{height:230px}
+.gmap.pannello{
+  position:fixed;left:0;right:0;bottom:var(--bar);z-index:25;margin:0;
+  padding:8px 16px 12px;background:var(--celadon);
+  border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(20,32,29,.22);
+}
+.gmap.pannello .map{height:42vh}
+.gmap.pannello .maplab{padding:0 0 4px}
+/* Una striscia di 34px sopra la navigazione, invece di un tasto che galleggia
+   sopra le parole: non copre niente e per giunta dice a che punto sei. */
+.mapfab{
+  position:fixed;left:0;right:0;bottom:var(--bar);z-index:26;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;
+  background:var(--ink);color:var(--paper);border:0;border-top:1px solid rgba(244,247,243,.14);
+  padding:9px 16px;cursor:pointer;width:100%;text-align:left;
+  transform:translateY(100%);transition:transform .2s ease;
+}
+.mapfab.on{transform:translateY(0)}
+.mapfab .cosa{color:#9FB3AB;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mapfab .verbo{flex:0 0 auto;text-transform:uppercase;letter-spacing:.14em}
+.mapfab.aperto{background:var(--cinnabar)}
+.mapfab.aperto .cosa{color:rgba(255,255,255,.85)}
+/* quando la striscia c'e', l'ultimo pezzo di testo non ci deve finire sotto */
+body.conbarra main{padding-bottom:calc(var(--bar) + 42px)}
 .gpunto.on h2{color:var(--cinnabar)}
 .gpunto.on .gnum{box-shadow:0 0 0 4px rgba(188,59,46,.2)}
 .act.guida{border-color:var(--cinnabar);color:var(--cinnabar)}
@@ -247,7 +271,7 @@ h3.sec:first-of-type{margin-top:6px}
 .gpunto{
   display:grid;grid-template-columns:26px 1fr;column-gap:12px;margin:0 0 22px;
   /* la mappa resta appiccicata in alto: chi ci scorre sopra non deve finirci sotto */
-  scroll-margin-top:calc(var(--headh,120px) + var(--gmaph,270px) + 12px);
+  scroll-margin-top:calc(var(--headh,120px) + 12px);
 }
 .gnum{
   width:26px;height:26px;border-radius:50%;background:var(--cinnabar);color:#fff;
@@ -1087,6 +1111,10 @@ function renderGuida(){
     </div>
     ${punti}
     ${g.coda ? `<p class="gcoda">${esc(g.coda)}</p>` : ""}
+    <button class="mapfab" id="mapFab">
+      <span class="cosa" id="fabCosa">Il percorso dentro</span>
+      <span class="verbo" id="fabVerbo">Mappa ▲</span>
+    </button>
     <p class="avviso">Posizioni da OpenStreetMap, foto da Wikimedia Commons con autore e licenza. I testi sono stati confrontati con le voci di Wikipedia il 27 agosto 2026 — il tasto «Fonte» sotto ogni punto apre quella usata — e il confronto ha corretto sei affermazioni e ne ha tolte tre. Quello che resta racconto o leggenda lo dice il testo stesso. Restano possibili errori: se un dettaglio ti serve preciso, apri la fonte.</p>`;
 
   const note = $("#mapnoteGuida");
@@ -1103,6 +1131,8 @@ function renderGuida(){
   /** Porta la mappa su un punto e lo accende, da qualunque lato si parta. */
   function fuoco(i, scorri){
     const p = g.punti[i];
+    // La mappa si sposta comunque: se il pannello è chiuso, quando lo apri è
+    // già sul punto giusto. Aprirlo da solo mentre leggi sarebbe invadente.
     drawn.map.setView(toGCJ(p.ll), 17, { animate: true });
     document.querySelectorAll(".gpunto.on").forEach(el => el.classList.remove("on"));
     document.querySelectorAll(".pin--on").forEach(el => el.classList.remove("pin--on"));
@@ -1112,6 +1142,8 @@ function renderGuida(){
     if(pin && pin.firstChild) pin.firstChild.classList.add("pin--on");
     const dove = $("#gWhere");
     if(dove) dove.textContent = `${i+1}. ${p.n}`;
+    const cosa = $("#fabCosa");
+    if(cosa) cosa.textContent = `${i+1}. ${p.n}`;
     if(scorri && sez) sez.scrollIntoView({ block: "center", behavior: "smooth" });
   }
 
@@ -1131,14 +1163,43 @@ function renderGuida(){
   };
 
   $("#gBack").onclick = () => { tab = "days"; render(); };
+
+  /* La mappa a richiesta. Il tasto compare solo quando la mappa in cima è
+     uscita di vista, e la riapre come pannello dal basso: si guarda dove si
+     è e si richiude senza aver perso il punto in cui si stava leggendo. */
+  const wrap = $("#mapGuida").closest(".gmap");
+  const fab = $("#mapFab");
+  let aperto = false;
+
+  function pannello(vero){
+    aperto = vero;
+    wrap.classList.toggle("pannello", vero);
+    fab.classList.toggle("aperto", vero);
+    $("#fabVerbo").textContent = vero ? "Chiudi ▼" : "Mappa ▲";
+    // Leaflet misura il contenitore quando nasce: cambiandogli forma va riavvisato.
+    requestAnimationFrame(() => {
+      drawn.map.invalidateSize();
+      if(vero) drawn.map.fitBounds(tuttiBounds, { padding:[12,12], maxZoom:16 });
+    });
+  }
+  fab.onclick = () => pannello(!aperto);
+
+  if("IntersectionObserver" in window){
+    new IntersectionObserver(([e]) => {
+      if(aperto) return;
+      const mostra = !e.isIntersecting;
+      fab.classList.toggle("on", mostra);
+      document.body.classList.toggle("conbarra", mostra);
+    }, { threshold: 0.15 }).observe(wrap);
+  } else {
+    fab.classList.add("on");
+    document.body.classList.add("conbarra");
+  }
+
   window.scrollTo({top:0, behavior:"instant"});
-  // Testata e mappa sono alte quanto sono alte: si misurano invece di
-  // indovinarle, così scorrendo a un punto il suo titolo non finisce sotto.
   const misura = () => {
     const h = document.querySelector("header");
-    const m = document.querySelector(".gmap");
     if(h) document.documentElement.style.setProperty("--headh", h.offsetHeight + "px");
-    if(m) document.documentElement.style.setProperty("--gmaph", m.offsetHeight + "px");
   };
   misura();
   requestAnimationFrame(misura);
@@ -1194,6 +1255,7 @@ function render(){
   // altrimenti Leaflet resta attaccato a nodi che non esistono più.
   killMaps();
   frameMarkers.clear();
+  document.body.classList.remove("conbarra");
   if(tab === "days") renderDay();
   else if(tab === "guida") renderGuida();
   else if(tab === "map") renderOverview();
