@@ -1061,6 +1061,7 @@ function renderGuida(){
         <div class="acts">
           <a class="act" href="${amap(p.ll, p.n)}" target="_blank" rel="noopener">Amap</a>
           <button class="act" data-copy="${coordText(p.ll)}">Copia coord.</button>
+          ${p.fonte ? `<a class="act" href="${esc(p.fonte)}" target="_blank" rel="noopener">Fonte</a>` : ""}
         </div>
       </div>
     </div>`).join("");
@@ -1086,7 +1087,7 @@ function renderGuida(){
     </div>
     ${punti}
     ${g.coda ? `<p class="gcoda">${esc(g.coda)}</p>` : ""}
-    <p class="avviso">Le posizioni dei punti vengono da OpenStreetMap e sono verificate; le foto da Wikimedia Commons, con autore e licenza sotto ognuna. I testi no: sono scritti a memoria, e su una data o un numero preciso possono sbagliare. Dove una cosa è leggenda e non storia, sta scritto.</p>`;
+    <p class="avviso">Posizioni da OpenStreetMap, foto da Wikimedia Commons con autore e licenza. I testi sono stati confrontati con le voci di Wikipedia il 27 agosto 2026 — il tasto «Fonte» sotto ogni punto apre quella usata — e il confronto ha corretto sei affermazioni e ne ha tolte tre. Quello che resta racconto o leggenda lo dice il testo stesso. Restano possibili errori: se un dettaglio ti serve preciso, apri la fonte.</p>`;
 
   const note = $("#mapnoteGuida");
   const drawn = drawMap($("#mapGuida"), g.punti.map((p, i) => ({

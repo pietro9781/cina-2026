@@ -68,6 +68,13 @@ const rotte = await page.evaluate(() => [...document.querySelectorAll('.gfoto im
 ok(rotte.length === 0, rotte.length ? 'IMMAGINI ROTTE: '+rotte.join(', ') : 'tutte le immagini caricano davvero');
 const crediti = await page.locator('.gfoto figcaption').allTextContents();
 ok(crediti.every(c => /·/.test(c) && c.length > 12), 'ognuna ha autore e licenza');
+const fonti = await page.locator('.gpunto a.act:has-text("Fonte")').count();
+ok(fonti === 13, `ogni punto ha il tasto Fonte: ${fonti}/13`);
+const link = await page.locator('.gpunto a.act:has-text("Fonte")').first().getAttribute('href');
+ok(/wikipedia\.org/.test(link), `e punta a una fonte vera: ${link}`);
+const testo = await page.locator('.wrap').innerText();
+ok(!/1888/.test(testo), 'la data sbagliata dell\'incendio non c\'e piu');
+ok(/1886/.test(testo), 'e c\'e quella giusta');
 console.log('   esempio credito:', crediti[0]);
 const parole = (await page.locator('.wrap').innerText()).split(/\s+/).length;
 console.log(`\nparole nella guida: ${parole}`);
