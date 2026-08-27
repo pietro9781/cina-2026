@@ -595,5 +595,281 @@ export const GUIDE = {
         curiosita: "Nel dicembre del 1936 a Xi'an successe una delle cose decisive della storia cinese: due generali sequestrarono Chiang Kai-shek e lo costrinsero ad allearsi con i comunisti contro l'invasione giapponese. È noto come l'incidente di Xi'an, e il luogo dove fu tenuto prigioniero è a poche centinaia di metri da questa porta, dentro le mura."
       }
     ]
+  },
+  "Base dei panda giganti": {
+    durata: "3 ore",
+    intro:
+      "Non è uno zoo ed è la ragione per cui vale la pena venirci: è un centro di ricerca sulla riproduzione, nato nel 1987 con sei panda salvati in natura. I recinti sono grandi e i panda si vedono da lontano, il che è il prezzo di farli stare bene. La regola d'oro è quella che hai già scritto: all'apertura, e verso il fondo — dopo le dieci si muovono meno e la gente è tutta all'ingresso.",
+    punti: [
+      {
+        n: "Nursery dei cuccioli",
+        zh: "太阳产房",
+        ll: [30.737612, 104.143436],
+        foto: { f: "foto/pa-2.jpg", autore: "Sheila Lau", licenza: "Public domain", fonte: "https://commons.wikimedia.org/wiki/File:Giant_Panda_2.JPG" },
+        fonte: "https://en.wikipedia.org/wiki/Chengdu_Research_Base_of_Giant_Panda_Breeding",
+        d: "Se ci sono cuccioli dell'anno, stanno qui. È l'unico punto della base dove si è vicini davvero, dietro un vetro, e per questo è anche quello con la coda più lunga: arrivarci per primo è l'intera ragione di sveglia presta. La stagione delle nascite è estate-inizio autunno, quindi a settembre le probabilità sono buone.",
+        curiosita: "Un panda appena nato pesa intorno ai cento grammi, cioè circa un millesimo della madre: è uno dei rapporti più estremi fra i mammiferi, paragonabile a quello dei marsupiali. Nasce rosa, cieco e senza pelo, e i disegni bianchi e neri compaiono nelle prime settimane. Quando ne nascono due, in natura la madre ne alleva quasi sempre uno solo — nei centri si fa a turno, scambiandoli, così sopravvivono entrambi."
+      },      {
+        n: "Ville dei panda adulti",
+        zh: "大熊猫别墅",
+        ll: [30.737315, 104.138708],
+        foto: { f: "foto/pa-1.jpg", autore: "@panda-ev1vh", licenza: "CC BY 3.0", fonte: "https://commons.wikimedia.org/wiki/File:Xi_Lan_panda_at_Chengdu,_2015.png" },
+        fonte: "https://en.wikipedia.org/wiki/Chengdu_Research_Base_of_Giant_Panda_Breeding",
+        d: "I recinti in fondo alla base, i più lontani dall'ingresso e quindi i più tranquilli. Ogni villa ospita pochi animali in uno spazio ampio con alberi e strutture per arrampicarsi. È qui che li vedi fare le uniche due cose che fanno: mangiare bambù seduti, e dormire su un ramo in equilibri improbabili.",
+        curiosita: "Un panda adulto mangia dai dieci ai venti chili di bambù al giorno e ci passa fino a quattordici ore. Il motivo è che ha l'apparato digerente di un carnivoro — è un orso a tutti gli effetti — e digerisce malissimo la cellulosa: ricava pochissima energia da ogni boccone, e per questo si muove il meno possibile. La pigrizia non è carattere, è bilancio energetico."
+      },      {
+        n: "Panda rossi",
+        zh: "小熊猫园",
+        ll: [30.736115, 104.142138],
+        foto: { f: "foto/pa-3.jpg", autore: "CEphoto, Uwe Aranas", licenza: "CC BY-SA 3.0", fonte: "https://commons.wikimedia.org/wiki/File:Chengdu_Sichuan_China_Panda-breeding-and-research-center-02.jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Chengdu_Research_Base_of_Giant_Panda_Breeding",
+        d: "Nei recinti verso ovest ci sono anche i panda rossi, che sono l'altra metà del nome del centro e che quasi tutti trascurano. Sono grandi come un gatto grosso, si muovono, si arrampicano, e a differenza dei cugini giganti sono attivi anche quando fa caldo. Spesso passeggiano su passerelle sopra la testa dei visitatori.",
+        curiosita: "Il panda rosso ha avuto il nome per primo: era «il panda» per quarant'anni prima che si scoprisse quello gigante, che fu poi chiamato «panda gigante» per distinguerlo. Non sono nemmeno parenti stretti — il rosso è una famiglia a sé, imparentata alla lontana con procioni e mustelidi. Condividono la dieta di bambù e un finto pollice per tenerlo, evoluto separatamente due volte."
+      },      {
+        n: "Museo del panda",
+        zh: "熊猫博物馆",
+        ll: [30.733474, 104.146647],
+        fonte: "https://en.wikipedia.org/wiki/Chengdu_Research_Base_of_Giant_Panda_Breeding",
+        d: "Vicino all'uscita, e va bene lasciarlo per ultimo quando i panda hanno smesso di muoversi. Racconta la storia della specie, quella della sua quasi estinzione e quella del programma di riproduzione — che è la ragione per cui questo posto esiste e non è un parco a tema.",
+        curiosita: "Nel 2016 il panda gigante è passato da «in pericolo» a «vulnerabile» nella lista rossa internazionale: una delle poche buone notizie della conservazione degli ultimi decenni, ottenuta soprattutto proteggendo le foreste di bambù e collegandole fra loro. La riproduzione in cattività è servita a evitare l'estinzione, ma è il corridoio di bosco che salva la specie."
+      }
+    ]
+  },
+  "Hongyadong": {
+    durata: "1 ora e mezza",
+    intro:
+      "Chongqing è costruita su una penisola di roccia fra due fiumi, e la conseguenza è che il piano terra di un edificio può essere l'ottavo piano di un altro. Hongyadong è l'esempio estremo: undici piani di palafitte attaccate alla falesia, con ingressi a quote diverse. È turistica fino al midollo e va vista lo stesso, perché il modo in cui questa città sta in piedi non somiglia a nient'altro.",
+    punti: [
+      {
+        n: "Hongyadong",
+        zh: "洪崖洞",
+        ll: [29.56219, 106.578985],
+        foto: { f: "foto/ho-1.jpg", autore: "Yumeto", licenza: "CC BY-SA 4.0", fonte: "https://commons.wikimedia.org/wiki/File:20250521_Hongyadong_(223216).jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Hongya_Cave",
+        d: "Undici piani costruiti nello stile diaojiaolou, le palafitte tradizionali del Sichuan e dello Hunan, ma in versione contemporanea e illuminata d'oro. Si entra a un livello e si esce a un altro senza aver fatto scale: dentro sono negozi e ristoranti. L'ingresso è gratuito, e la parte migliore è capire come è incastrato nella roccia.",
+        curiosita: "Guardalo anche da fuori, dal ponte Qiansimen: è da lì che si vedono tutti e undici i piani insieme, ed è la fotografia che tutti fanno. Accendono le luci verso le diciannove e mezza; prima è un edificio marrone qualunque. Il paragone con la città del film di Miyazaki è inevitabile ed è anche il motivo per cui è pieno di gente: la somiglianza è nata dopo, non prima."
+      },      {
+        n: "Chaotianmen",
+        zh: "朝天门",
+        ll: [29.566623, 106.587785],
+        foto: { f: "foto/ho-3.jpg", autore: "rheins", licenza: "CC BY 3.0", fonte: "https://commons.wikimedia.org/wiki/File:重庆长江索道_-_Chongqing_Yangtze_River_Cableway_-_2015.04_-_panoramio.jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Hongya_Cave",
+        d: "La punta della penisola, dove lo Jialing verde entra nello Yangtze giallo. Per un tratto le due acque scorrono affiancate senza mescolarsi, e la linea di separazione si vede a occhio nudo. Era il porto storico della città: «porta rivolta al cielo», da cui partivano i battelli per Shanghai.",
+        curiosita: "La differenza di colore viene dal carico di sedimenti: lo Yangtze scende dall'altopiano tibetano portandosi via mezzo Sichuan, lo Jialing arriva da bacini più calmi. Il contrasto è più netto d'estate, dopo le piogge. Sopra la confluenza sta il Raffles City, il complesso di grattacieli con una passerella orizzontale sospesa in cima fra quattro torri — la vista da lì è a pagamento e non è indispensabile."
+      },      {
+        n: "Funivia sullo Yangtze",
+        zh: "长江索道",
+        ll: [29.555206, 106.588161],
+        fonte: "https://en.wikipedia.org/wiki/Hongya_Cave",
+        d: "Una cabinovia che attraversa lo Yangtze da una sponda all'altra: era un mezzo di trasporto per pendolari, adesso è un'attrazione, ma la traversata dura pochi minuti e ti mette sospeso sopra il fiume in mezzo ai grattacieli. La coda può essere lunga; conviene prendere il biglietto in anticipo.",
+        curiosita: "Chongqing è stata capitale della Cina durante la guerra contro il Giappone, quando Nanchino cadde: fu bombardata per anni e la popolazione viveva nelle gallerie scavate nella roccia. Molte di quelle gallerie oggi sono ristoranti, magazzini e persino sale hotpot — se ne vedi una con la porta ad arco nella pietra, quella è la sua origine."
+      },      {
+        n: "Monumento alla Liberazione",
+        zh: "解放碑",
+        ll: [29.557218, 106.577047],
+        foto: { f: "foto/ho-2.jpg", autore: "Baycrest", licenza: "CC BY-SA 2.5", fonte: "https://commons.wikimedia.org/wiki/File:Jiefangbei_night.jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Hongya_Cave",
+        d: "Al centro della zona pedonale, circondato da schermi pubblicitari alti quanto lui: una colonna bianca che sembra fuori posto e invece è il motivo per cui il quartiere si chiama Jiefangbei. È il centro commerciale della città e la sera è una parete di luce.",
+        curiosita: "Fu eretto durante la guerra come «monumento allo spirito della resistenza», ed è l'unico monumento di quel tipo rimasto in Cina; dopo il 1949 fu ribattezzato monumento alla liberazione. Oggi la sua altezza è un dettaglio comico: era il punto più alto della città e adesso è la cosa più bassa dell'isolato."
+      }
+    ]
+  },
+  "Tianmen Mountain": {
+    durata: "4-5 ore",
+    intro:
+      "Una montagna che comincia dal centro città: la funivia parte a pochi passi dalla stazione di Zhangjiajie e sale per quasi otto chilometri fino a quota millecinquecento — è fra le più lunghe al mondo. In cima ci sono passerelle a strapiombo, alcune col fondo di vetro; sotto c'è un buco naturale nella roccia grande come una cattedrale. Il giro giusto è quello che hai già scritto: su in funivia, giù con le scale mobili.",
+    punti: [
+      {
+        n: "Funivia",
+        zh: "天门山索道",
+        ll: [29.046805, 110.48199],
+        foto: { f: "foto/ti-1.jpg", autore: "Qa003qa003", licenza: "CC BY-SA 4.0", fonte: "https://commons.wikimedia.org/wiki/File:Tianmen_Mountain_20180326_094808.jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Tianmen_Mountain",
+        d: "Quasi trenta minuti sospesi, con un tratto finale molto ripido che passa sopra la strada a tornanti. Non è un trasferimento, è già la visita: si sorvola la città, poi i campi, poi la parete. Siediti dal lato giusto e guarda in basso quando comincia la salita ripida.",
+        curiosita: "Sotto di te c'è la Strada del Cielo, novantanove tornanti in undici chilometri che salgono fino alla base della grotta. Il numero non è casuale: nove è il numero del cielo nella tradizione cinese, e novantanove è nove volte nove. La strada è famosa fra i piloti e si vede benissimo dalla cabina."
+      },      {
+        n: "Passerelle di vetro",
+        zh: "玻璃栈道",
+        ll: [29.044071, 110.48112],
+        foto: { f: "foto/ti-3.jpg", autore: "xiquinhosilva", licenza: "CC BY 2.0", fonte: "https://commons.wikimedia.org/wiki/File:Tianmen_Mountain_38215-Zhangjiajie_(48757755772).jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Tianmen_Mountain",
+        d: "Tratti di camminamento appesi alla parete verticale, con alcune sezioni dal fondo trasparente e centinaia di metri di vuoto sotto. Ti fanno mettere dei copriscarpe di stoffa, per non graffiare il vetro. Se il vuoto ti dà fastidio si può evitare: i tratti di vetro hanno sempre un percorso alternativo in pietra.",
+        curiosita: "Le passerelle sono più d'una e stanno su versanti diversi — Guigu a est, Rainbow a ovest — quindi non è detto che tu le faccia tutte, e non serve. Il pezzo che vale davvero è il camminamento normale a strapiombo, che gira intorno alla montagna per chilometri e ha la vista senza il teatrino del vetro."
+      },      {
+        n: "Cima e piattaforma panoramica",
+        zh: "天台",
+        ll: [29.048592, 110.47991],
+        fonte: "https://en.wikipedia.org/wiki/Tianmen_Mountain",
+        d: "Il punto più alto raggiungibile, con la terrazza affacciata sul vuoto. Da qui, quando è limpido, si vede il pianoro sotto e la città in fondo; quando non lo è, si vede il mare di nuvole, che è meglio. In cima c'è anche un tempio, ricostruito, in mezzo a un bosco che è già un altro clima rispetto a valle.",
+        curiosita: "La differenza di quota fra la partenza della funivia e la cima è di circa milletrecento metri, e si sente: in basso è subtropicale, in cima ci sono conifere. Da questa montagna vengono alcune specie di piante che non crescono altrove in zona; l'isolamento verticale funziona come quello delle isole."
+      },      {
+        n: "Porta del Cielo",
+        zh: "天门洞",
+        ll: [29.047792, 110.487967],
+        foto: { f: "foto/ti-2.jpg", autore: "xiquinhosilva", licenza: "CC BY 2.0", fonte: "https://commons.wikimedia.org/wiki/File:Tianmen_38258-Zhangjiajie_(49047523437).jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Tianmen_Mountain",
+        d: "Il buco: un arco naturale nella roccia alto più di centotrenta metri, aperto da parte a parte, che si vede da chilometri di distanza. Crollò da solo nel 263 dopo Cristo, aprendo la parete. È la cosa per cui questa montagna è famosa e regge le aspettative.",
+        curiosita: "Nel 1999 un pilota russo ci passò attraverso in aereo, e da allora ci sono passati con di tutto — deltaplani, tute alari, una moto lanciata da una rampa. Il buco è largo abbastanza da poterci volare dentro, e questa è probabilmente la cosa più difficile da capire finché non ci sei sotto."
+      },      {
+        n: "I 999 gradini",
+        zh: "上天梯",
+        ll: [29.049679, 110.487177],
+        foto: { f: "foto/ti-4.jpg", autore: "xiquinhosilva", licenza: "CC BY 2.0", fonte: "https://commons.wikimedia.org/wiki/File:Stairway_to_Heaven's_Door_38318-Zhangjiajie_(49047306866).jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Tianmen_Mountain",
+        d: "La scalinata che sale dalla base della grotta fino all'arco: novecentonovantanove gradini, ripidi, senza tratti piani. In discesa sono duri sulle ginocchia, in salita sono duri e basta. Accanto ci sono le scale mobili coperte, a pagamento, e prenderle non è barare: è il consiglio del tuo stesso itinerario.",
+        curiosita: "Anche qui il numero è simbolico: nove ripetuto, il numero dell'imperatore e del cielo. Le scale mobili dentro la montagna sono una serie di tratti scavati nella roccia che coprono il dislivello dalla grotta alla cima; ci si mette una mezz'ora buona e si passa quasi tutto il tempo sotto terra."
+      }
+    ]
+  },
+  "Yuanjiajie": {
+    durata: "3 ore",
+    intro:
+      "È il pianoro delle piattaforme: si arriva in alto con la navetta o con l'ascensore, e da lì si cammina da un affaccio all'altro guardando le colonne di arenaria spuntare dal bosco sotto di te. Sono quarzoarenarie erose per centinaia di milioni di anni, e ce ne sono più di tremila in tutto il parco. Presto, prima che arrivino i gruppi: dopo le dieci le piattaforme sono una fila.",
+    punti: [
+      {
+        n: "Piattaforme panoramiche",
+        zh: "袁家界",
+        ll: [29.347372, 110.440726],
+        foto: { f: "foto/yu-1.jpg", autore: "chensiyuan", licenza: "CC BY-SA 4.0", fonte: "https://commons.wikimedia.org/wiki/File:1_zhangjiajie_huangshizhai_wulingyuan_panorama_2012.jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Zhangjiajie_National_Forest_Park",
+        d: "Il primo affaccio dopo l'arrivo, e quello che ti fa capire dove sei: un mare di pinnacoli che escono dal verde, alcuni sottili come campanili, alcuni con alberi in cima. La cosa che sorprende non è l'altezza ma la densità — non c'è una montagna, ce ne sono centinaia, tutte separate.",
+        curiosita: "Sono arenarie quarzose depositate quando qui c'era il mare, poi sollevate e tagliate da fratture verticali. L'acqua ha scavato lungo le fratture per milioni di anni, e il gelo ha fatto il resto staccando lastre. Le colonne restano in piedi perché il quarzo è duro e perché le radici degli alberi in cima tengono insieme la testa: senza vegetazione crollerebbero prima."
+      },      {
+        n: "Primo Ponte del Mondo",
+        zh: "天下第一桥",
+        ll: [29.344917, 110.438238],
+        fonte: "https://en.wikipedia.org/wiki/Zhangjiajie_National_Forest_Park",
+        d: "Un arco naturale che collega due pinnacoli, sottile e con un burrone sotto: si attraversa a piedi, con il parapetto pieno di lucchetti e nastri rossi. È il punto più fotografato del pianoro dopo la piattaforma di Avatar.",
+        curiosita: "Non è stato costruito: è quel che resta quando la roccia intorno si sgretola e una lastra più dura resiste. È lo stesso processo degli archi naturali dello Utah, ma su arenaria diversa e in un clima molto più umido, il che rende questo posto un caso raro — di solito l'umidità distrugge questo tipo di formazioni invece di conservarle."
+      },      {
+        n: "Terrazza Incantata",
+        zh: "迷魂台",
+        ll: [29.343586, 110.444072],
+        foto: { f: "foto/yu-3.jpg", autore: "xiquinhosilva", licenza: "CC BY 2.0", fonte: "https://commons.wikimedia.org/wiki/File:Zhangjiajie_National_Forest_Park_37718-Zhangjiajie_(48757249388).jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Zhangjiajie_National_Forest_Park",
+        d: "Uno degli affacci meno affollati, un po' fuori dal circuito principale. Il nome vuol dire più o meno «terrazza che confonde l'anima» e viene dalla nebbia: quando sale dal basso, le colonne compaiono e scompaiono e si perde il senso della distanza.",
+        curiosita: "La nebbia qui è la regola più che l'eccezione: il parco ha oltre duecento giorni di nebbia l'anno. È la ragione per cui la tua giornata di riserva del quindici è scritta come è scritta — se il quattordici c'è nebbia fitta, rifare Yuanjiajie con il cielo giusto vale più che vedere un settore nuovo nel bianco."
+      },      {
+        n: "Ascensore Bailong",
+        zh: "百龙天梯",
+        ll: [29.3458, 110.47254],
+        foto: { f: "foto/yu-4.jpg", autore: "Codas", licenza: "CC BY-SA 4.0", fonte: "https://commons.wikimedia.org/wiki/File:Bailong_Elevator_area_02.jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Zhangjiajie_National_Forest_Park",
+        d: "Un ascensore di vetro attaccato alla parete verticale, trecentotrentacinque metri di dislivello in un minuto e mezzo: la prima metà dentro la roccia, la seconda all'aperto appesa fuori. È il modo più rapido di passare dal fondovalle al pianoro, ed è anche un pezzo di attrazione a sé.",
+        curiosita: "Il consiglio che si sente da chi ci è stato — e che il tuo itinerario ha già raccolto — è di prenderlo in discesa e non in salita: le code peggiori si formano in basso al mattino, quando tutti salgono insieme. In discesa nel pomeriggio si passa quasi sempre senza aspettare."
+      }
+    ]
+  },
+  "Monte Tianzi": {
+    durata: "3 ore",
+    intro:
+      "Il settore più alto del parco e, secondo quasi tutti quelli che ci sono stati, quello con i panorami migliori. Si sale in funivia e si scende a piedi lungo il sentiero delle Dieci Miglia, che è la parte bella e anche quella dove stanno le scimmie: tienile d'occhio e non tirare fuori il cibo.",
+    punti: [
+      {
+        n: "Grande piattaforma panoramica",
+        zh: "观景台",
+        ll: [29.377096, 110.462863],
+        foto: { f: "foto/tz-1.jpg", autore: "Kovacs Bela-Hungary", licenza: "CC BY 3.0", fonte: "https://commons.wikimedia.org/wiki/File:Zhangjiajie,_National_park_-_panoramio_(1).jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Tianzi_Mountain",
+        d: "L'affaccio principale, subito sopra l'arrivo della funivia. Da qui si vede il settore più vasto del parco: valli intere piene di pinnacoli fino all'orizzonte, senza un edificio in mezzo. Se il tempo è limpido è la vista più ampia di tutto il viaggio.",
+        curiosita: "Il nome della montagna significa «figlio del cielo», cioè imperatore, e viene da un capo di etnia tujia che qui si proclamò re nel Quattordicesimo secolo guidando una rivolta contadina. Perse, e la montagna prese il suo nome. Questa zona è ancora abitata dai tujia, che hanno lingua e architettura proprie."
+      },      {
+        n: "Un Passo Pericoloso",
+        zh: "一步难行",
+        ll: [29.379598, 110.464223],
+        fonte: "https://en.wikipedia.org/wiki/Tianzi_Mountain",
+        d: "Un tratto di sentiero stretto lungo la parete, con il vuoto da un lato e la roccia dall'altro. Il nome è più spaventoso della cosa: è protetto, ma la sensazione di cammino in bilico è reale ed è quella che si viene a cercare.",
+        curiosita: "I nomi dei punti panoramici qui sono tutti così — «gallo che becca», «scimmia comandante», «pennello dell'imperatore» — e vengono dalla forma che qualcuno ci ha visto secoli fa. È una convenzione della cultura del paesaggio cinese: le montagne non si misurano, si riconoscono, e ogni forma ha una storia attaccata."
+      },      {
+        n: "Ponte Naturale Celeste",
+        zh: "天下第一桥",
+        ll: [29.372173, 110.467656],
+        foto: { f: "foto/tz-2.jpg", autore: "Rocio Gil", licenza: "CC BY-SA 4.0", fonte: "https://commons.wikimedia.org/wiki/File:Rock_formations_hiding_in_the_clouds.jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Tianzi_Mountain",
+        d: "Un altro arco naturale, in una zona dove la nebbia sale spesso dal fondovalle. Quando c'è il mare di nuvole si vede solo la cima delle colonne, e sembrano isole. È la cartolina classica di Zhangjiajie ed è anche il motivo per cui vale la pena essere qui presto.",
+        curiosita: "Il mare di nuvole si forma quando l'aria umida del fondovalle si raffredda di notte e resta intrappolata sotto uno strato più caldo. Si dissolve con il sole del mattino: dalle nove in poi le probabilità calano in fretta. È la stessa ragione per cui i fotografi salgono qui all'alba e i pullman arrivano quando ormai è finito."
+      },      {
+        n: "Trono dell'Imperatore",
+        zh: "御笔峰",
+        ll: [29.371893, 110.467901],
+        fonte: "https://en.wikipedia.org/wiki/Tianzi_Mountain",
+        d: "Un gruppo di colonne allineate come pennelli in un portapenne, ed è esattamente da lì che viene il nome cinese, «picchi del pennello imperiale». È uno dei punti che compaiono su ogni depliant del parco.",
+        curiosita: "Secondo la leggenda tujia, il capo ribelle che diede il nome alla montagna gettò qui i propri pennelli dopo la sconfitta, e le colonne sono quelli. Le leggende locali sono quasi sempre più recenti delle rocce di parecchie centinaia di milioni di anni, ma sono l'unica cosa che rende memorabile un panorama in cui tutte le colonne, oggettivamente, si somigliano."
+      }
+    ]
+  },
+  "Yangjiajie": {
+    durata: "3-4 ore",
+    intro:
+      "Il settore nord-ovest, aggiunto al parco più tardi degli altri e per questo molto meno battuto: chi ci arriva lo chiama spesso la parte migliore, e soprattutto quella senza calca. Ci vogliono una quarantina di minuti di navetta interna dal centro del parco. Verifica il percorso delle navette la sera prima — non collegano tutto, e non tutti i giorni allo stesso modo.",
+    punti: [
+      {
+        n: "Dimora di Tianbo",
+        zh: "天波府",
+        ll: [29.358365, 110.421704],
+        foto: { f: "foto/ya-1.jpg", autore: "Yoo Chung", licenza: "CC BY-SA 2.5", fonte: "https://commons.wikimedia.org/wiki/File:Yangjiajie.jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Wulingyuan",
+        d: "Il punto simbolo del settore: un gruppo di pareti verticali affiancate che salgono dritte dal bosco, con la forma di una fortezza. Il nome viene da una famiglia di generali dei romanzi popolari, i Yang, da cui prende il nome tutto il settore.",
+        curiosita: "Questa parte del parco ha meno passerelle e più sentiero vero: si cammina su gradini scavati e su tratti di terra, non su cemento. È il motivo per cui è meno affollata e anche per cui è più faticosa. Se piove diventa scivolosa sul serio, e in quel caso conviene ripiegare sulle piattaforme di Yuanjiajie."
+      },      {
+        n: "Muraglia Naturale",
+        zh: "天然长城",
+        ll: [29.359384, 110.42321],
+        fonte: "https://en.wikipedia.org/wiki/Wulingyuan",
+        d: "Un affaccio su una fila di guglie allineate lungo un crinale, che da lontano somiglia a una cinta muraria con le sue torri. Da qui l'analogia con la Grande Muraglia è talmente evidente da spiegare da sola il nome.",
+        curiosita: "Se hai visto Jinshanling il quattro settembre, il confronto è divertente: là una muraglia costruita per seguire il crinale, qui un crinale che sembra una muraglia. La forma nasce dalla stessa causa geologica delle colonne — fratture verticali parallele — ma qui le fratture sono più fitte e la roccia si è staccata a lame invece che a pilastri."
+      },      {
+        n: "Un Passo verso il Cielo",
+        zh: "一步登天",
+        ll: [29.350655, 110.423684],
+        fonte: "https://en.wikipedia.org/wiki/Wulingyuan",
+        d: "Un passaggio stretto fra due pareti, con gradini ripidi e un tratto in cui si sale quasi verticalmente. È il pezzo che ricordano tutti quelli che fanno questo settore, e non per la vista ma per la sensazione di infilarsi dentro la montagna.",
+        curiosita: "Sentieri come questo esistono in tutto il parco e sono spesso stati scavati dai tujia molto prima che diventasse riserva: erano le vie per raggiungere i campi in alto e le zone di raccolta. La differenza fra un sentiero turistico e uno di lavoro, qui, è quasi sempre solo il corrimano."
+      },      {
+        n: "Punto del Binocolo",
+        zh: "",
+        ll: [29.35613, 110.421003],
+        fonte: "https://en.wikipedia.org/wiki/Wulingyuan",
+        d: "Un affaccio laterale, poco segnalato, che guarda verso il settore centrale del parco. Vale la sosta perché da qui si vede da lontano la zona delle piattaforme dove eri il giorno prima: è l'unico punto in cui il parco si ricompone come un insieme invece che come una serie di panorami separati.",
+        curiosita: "Wulingyuan è patrimonio dell'umanità dal 1992, e la ragione formale è proprio l'estensione: non un pinnacolo spettacolare ma un intero paesaggio di pinnacoli, su decine di chilometri quadrati, con il proprio ecosistema. È il tipo di cosa che si capisce solo da un punto abbastanza lontano — e questo è uno dei pochi."
+      }
+    ]
+  },
+  "Golden Whip Stream": {
+    durata: "2-3 ore",
+    intro:
+      "Il fondovalle, e l'unico tratto che si fa solo a piedi: nessuna funivia, nessuna scala mobile, nessuna coda. Sette chilometri di sentiero pianeggiante lungo un torrente, con le colonne che ti guardano dall'alto invece che dal basso. Ombreggiato, fresco, e — dopo due giorni di piattaforme e ascensori — un sollievo.",
+    punti: [
+      {
+        n: "Il torrente",
+        zh: "金鞭溪",
+        ll: [29.323069, 110.440895],
+        foto: { f: "foto/gw-1.jpg", autore: "gdczjkk", licenza: "CC BY 3.0", fonte: "https://commons.wikimedia.org/wiki/File:金鞭溪_-_panoramio_(1).jpg" },
+        fonte: "https://en.wikipedia.org/wiki/Zhangjiajie_National_Forest_Park",
+        d: "Acqua limpida su ciottoli, ponticelli di pietra, e bosco fitto da tutte e due le parti. Il sentiero segue il torrente per tutta la lunghezza e non ha praticamente dislivello: si cammina per due o tre ore senza fatica, e la difficoltà è solo la distanza.",
+        curiosita: "Il nome viene dalla Roccia della Frusta d'Oro, un pinnacolo sottile e dorato al sole che sta a metà percorso. Nell'acqua ci sono gamberi e piccoli pesci, e il torrente è uno dei corsi d'acqua meglio conservati della zona: è il fondo di un canyon che le colonne hanno protetto dall'urbanizzazione semplicemente rendendolo inaccessibile."
+      },      {
+        n: "Roccia della Frusta d'Oro",
+        zh: "金鞭岩",
+        ll: [29.323069, 110.440895],
+        fonte: "https://en.wikipedia.org/wiki/Zhangjiajie_National_Forest_Park",
+        d: "Una colonna sottile e alta che si stacca dal resto, con una punta più chiara che al sole del pomeriggio diventa dorata. È il punto di riferimento del sentiero e quello da cui prende il nome tutto il percorso.",
+        curiosita: "Accanto ce n'è un'altra più tozza, chiamata «il compagno fedele»: la leggenda locale racconta di una guardia rimasta accanto al proprio signore anche dopo la morte. Sono i nomi che i tujia hanno dato a queste rocce, e insieme fanno una specie di romanzo sparso lungo sette chilometri di sentiero."
+      },      {
+        n: "Le scimmie",
+        zh: "",
+        ll: [29.325655, 110.432632],
+        fonte: "https://en.wikipedia.org/wiki/Zhangjiajie_National_Forest_Park",
+        d: "Lungo il torrente ci sono macachi, abituati alle persone e per niente timidi. Non sono pericolosi ma sono ladri: aprono zaini, strappano sacchetti e sanno riconoscere una bottiglia. La regola è semplice — niente cibo in mano, niente cibo visibile, e non guardarli negli occhi troppo a lungo.",
+        curiosita: "Sono macachi rhesus, la stessa specie che ha dato il nome al fattore Rh del sangue umano, scoperto studiando questi animali negli anni Quaranta. In questo parco sono aumentati proprio grazie ai visitatori che li nutrono, il che è il motivo per cui è vietato: una popolazione che dipende dal cibo umano diventa aggressiva e smette di cercarsi il proprio."
+      },      {
+        n: "Sbocco verso il Bailong",
+        zh: "",
+        ll: [29.330833, 110.435556],
+        fonte: "https://en.wikipedia.org/wiki/Zhangjiajie_National_Forest_Park",
+        d: "L'estremità nord del sentiero, dove il fondovalle finisce e si torna verso l'ascensore e le navette. Se hai fatto il percorso in questo senso ti trovi al punto giusto per risalire; se lo fai al contrario, questo è il punto da cui parti.",
+        curiosita: "Il tratto si può fare in tutte e due le direzioni e non c'è una scelta migliore in assoluto, ma c'è una regola pratica: la luce del pomeriggio entra da ovest e illumina le pareti su un lato solo. Camminare verso nord nel pomeriggio significa avere le colonne illuminate davanti invece che controluce."
+      }
+    ]
   }
 };
