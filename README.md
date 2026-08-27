@@ -90,7 +90,7 @@ dove due tappe consecutive distano più di 60 km.
 ## Modifiche
 
 Dopo aver cambiato l'itinerario, **alzare il numero di `CACHE` in `sw.js`**
-(`cina-2026-v2` → `v3`), altrimenti il telefono continua a mostrare la versione
+(`cina-2026-v5` → `v6`), altrimenti il telefono continua a mostrare la versione
 vecchia.
 
 ## Verifiche
